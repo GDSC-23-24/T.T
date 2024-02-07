@@ -1,5 +1,8 @@
 package com.Agari.TT.domain.ImageData.Service;
 
+import com.Agari.TT.domain.ImageData.Dto.ImageDto;
+import com.Agari.TT.domain.ImageData.Entity.ImageData;
+import com.Agari.TT.domain.ImageData.Repository.ImageDataRepository;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobInfo;
@@ -12,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
@@ -26,6 +30,24 @@ public class ImageService {
 
     @Value("${spring.cloud.gcp.storage.bucket}")
     private String bucketName;
+
+    private final ImageDataRepository imageDataRepository;
+
+    @Transactional
+    public void save(MultipartFile file, ImageDto imageDto) throws IOException {
+
+        String url = this.exec(file);
+
+        ImageData imageData = ImageData.builder()
+                .name(file.getOriginalFilename())
+                .type(file.getContentType())
+                .isProfileImage(false)
+                .filePath(url)
+                .build();
+
+        imageDataRepository.save(imageData);
+    }
+
 
     public String exec(MultipartFile multipartFile) throws IOException {
         InputStream keyFile = ResourceUtils.getURL(keyFileName).openStream();

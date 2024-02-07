@@ -27,6 +27,8 @@ public class ImageData {
 
     private String filePath;
 
+    private LocalDateTime fileDate;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
