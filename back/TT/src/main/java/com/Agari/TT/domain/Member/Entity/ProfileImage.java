@@ -19,12 +19,12 @@ public class ProfileImage {
     @Column(name = "profile_image_id")
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
-    ImageData imageData;
+    private ImageData imageData;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    Member member;
+    private Member member;
 
 }

@@ -27,12 +27,14 @@ public class ImageData {
 
     private String filePath;
 
-    private LocalDateTime fileDate;
+    private double longitude;
+
+    private double latitude;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
     private Boolean isProfileImage;

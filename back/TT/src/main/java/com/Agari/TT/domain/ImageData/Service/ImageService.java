@@ -34,18 +34,8 @@ public class ImageService {
     private final ImageDataRepository imageDataRepository;
 
     @Transactional
-    public void save(MultipartFile file, ImageDto imageDto) throws IOException {
-
-        String url = this.exec(file);
-
-        ImageData imageData = ImageData.builder()
-                .name(file.getOriginalFilename())
-                .type(file.getContentType())
-                .isProfileImage(false)
-                .filePath(url)
-                .build();
-
-        imageDataRepository.save(imageData);
+    public ImageData save(ImageData image) {
+        return imageDataRepository.save(image);
     }
 
 
