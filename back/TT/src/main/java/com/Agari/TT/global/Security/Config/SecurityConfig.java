@@ -88,10 +88,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                                 authorizeHttpRequests
                                 .requestMatchers("/**").permitAll()
-//                                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resource의 static폴더 내부 허용
-//                                        .requestMatchers("/v3/api-docs/**","/swagger-resources/**","/swagger-ui/**","/api-docs/**","/static/**").permitAll()
-//                                        .requestMatchers("/api/sign-in", "/api/sign-up","/login/**").permitAll()
-//                                        .anyRequest().authenticated()
+                                        .requestMatchers("/v3/api-docs/**","/swagger-resources/**","/swagger-ui/**","/api-docs/**","/static/**").permitAll()
+                                        .requestMatchers("/api/sign-in", "/api/sign-up","/api/sign-in").permitAll()
+                                        .anyRequest().authenticated()
                 )
                 // AccessDeniedHandler :  권한을 확인하는 과정에서 통과하지 못하는 예외가 발생할 경우 예외를 전달
                 // AuthenticationEntryPoint : 인증과정에서 예외가 발생할 경웅 예외를 전달

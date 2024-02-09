@@ -28,8 +28,8 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String secretKey = "secretKey";
 
-    private final long tokenValidMilliSecond = 1000L * 60 *60;
-//    private final long tokenValidMilliSecond = 5184000000L; // 2개월 기간
+//    private final long tokenValidMilliSecond = 1000L * 60 *60;
+    private final long tokenValidMilliSecond = 5184000000L; // 2개월 기간
 
     @PostConstruct
     protected void init(){

@@ -28,7 +28,7 @@ public class TrashService {
 
 
     public int save(MultipartFile trashImage, String loginId) throws IOException {
-        String url = ImageService.exec(trashImage);
+        String url = imageService.exec(trashImage);
 
         Member member =  memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
