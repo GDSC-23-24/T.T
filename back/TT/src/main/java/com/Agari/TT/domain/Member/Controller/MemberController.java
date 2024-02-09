@@ -27,7 +27,6 @@ public class MemberController {
      */
     @PostMapping("/api/sign-up")
     public CommonResponse signUp(@RequestPart MultipartFile profileImage, @RequestPart SignUpDto signUpDto) throws IOException {
-
         return memberService.save(profileImage, signUpDto);
     }
 

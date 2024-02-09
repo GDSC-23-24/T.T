@@ -4,6 +4,7 @@ import com.Agari.TT.domain.ImageData.Entity.ImageData;
 import com.Agari.TT.domain.Member.Entity.Enum.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 
@@ -29,6 +30,9 @@ public class Member {
     private String password;
 
     private String nickname;
+
+
+    private Integer coin;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "member")
     private ProfileImage profileImage;

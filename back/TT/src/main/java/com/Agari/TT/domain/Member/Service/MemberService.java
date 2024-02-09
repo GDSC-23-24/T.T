@@ -49,6 +49,7 @@ public class MemberService {
                 .loginId(signUpDto.getLoginId())
                 .password(signUpDto.getPassword())
                 .nickname(signUpDto.getNickname())
+                .coin(0)
                 .role(Role.USER)
                 .build();
 
