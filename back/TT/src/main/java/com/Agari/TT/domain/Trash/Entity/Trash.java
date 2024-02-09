@@ -36,5 +36,6 @@ public class Trash {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     Member member;
 }

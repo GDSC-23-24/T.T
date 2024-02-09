@@ -26,10 +26,10 @@ import java.util.UUID;
 public class ImageService {
 
     @Value("${spring.cloud.gcp.storage.credentials.location}")
-    private  static String keyFileName;
+    private  String keyFileName;
 
     @Value("${spring.cloud.gcp.storage.bucket}")
-    private static String bucketName;
+    private String bucketName;
 
     private final ImageDataRepository imageDataRepository;
 
@@ -39,7 +39,7 @@ public class ImageService {
     }
 
 
-    public static String exec(MultipartFile multipartFile) throws IOException {
+    public String exec(MultipartFile multipartFile) throws IOException {
         InputStream keyFile = ResourceUtils.getURL(keyFileName).openStream();
 
         String uuid = UUID.randomUUID().toString();
