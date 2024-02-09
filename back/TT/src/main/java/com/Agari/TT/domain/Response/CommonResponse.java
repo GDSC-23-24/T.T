@@ -34,6 +34,10 @@ public class CommonResponse {
         setSuccessResponse(msg);
     }
 
+    public CommonResponse(String msg, boolean bool){
+        if(!bool) setFailResponse(msg);
+    }
+
     public  CommonResponse(){
 
     }

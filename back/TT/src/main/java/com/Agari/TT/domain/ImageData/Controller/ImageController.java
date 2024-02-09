@@ -29,7 +29,7 @@ public class ImageController {
 
     @PostMapping("/api/test")
     public CommonResponse test(@RequestPart MultipartFile file, @RequestPart ImageDto imageDto) throws IOException {
-        imageService.save(file,imageDto);
+//        imageService.save(file,imageDto);
         return new CommonResponse("성공");
     }
 
