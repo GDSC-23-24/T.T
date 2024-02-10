@@ -35,6 +35,10 @@ public class TrashService {
 
         // 여기서 이제 ai랑 연동하는데 내가 url만 주면 바로 사진 가져가서 분석이 가능한 지 (지금은 대충 받았다고 치겠음)
 
+
+        // 여기서 식별 실패하면 관리자에게 인증요청하기
+
+
         String trashType = "플라스틱";
 
         Trash trash = Trash.builder()

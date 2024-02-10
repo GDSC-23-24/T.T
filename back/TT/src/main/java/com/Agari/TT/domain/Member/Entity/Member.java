@@ -31,12 +31,8 @@ public class Member {
 
     private String nickname;
 
-
-    private Integer coin;
-
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "member")
     private ProfileImage profileImage;
-
 
     @Enumerated(value = EnumType.STRING)
     private Role role;
