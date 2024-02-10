@@ -43,7 +43,7 @@ public class TrashService {
                 .member(member)
                 .build();
 
-        // 쓰레기 타입에 따른 코인 차등 부여
+        // 쓰레기 타입에 따른 코인 차등 부여 (추후 작성)
 
         trashRepository.save(trash);
 
