@@ -20,12 +20,22 @@ public class MemberDto {
 
     String profileImageUrl;
 
+
     public static MemberDto from(Member member){
         return new MemberDto(
                 member.getId(),
                 member.getLoginId(),
                 member.getNickname(),
-                member.getProfileImage().getImageData().getFilePath()
+                null
+        );
+    }
+
+    public static MemberDto from(Member member, String profileImageUrl){
+        return new MemberDto(
+                member.getId(),
+                member.getLoginId(),
+                member.getNickname(),
+                profileImageUrl
         );
     }
 

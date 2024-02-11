@@ -19,9 +19,10 @@ public class ProfileImage {
     @Column(name = "profile_image_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "image_id")
-    private ImageData imageData;
+    private String name;
+
+    private String profileImageUrl;
+
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

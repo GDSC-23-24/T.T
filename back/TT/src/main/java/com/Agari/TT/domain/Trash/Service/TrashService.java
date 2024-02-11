@@ -1,5 +1,6 @@
 package com.Agari.TT.domain.Trash.Service;
 
+import com.Agari.TT.domain.FishBowl.Repository.FishBowlRepository;
 import com.Agari.TT.domain.ImageData.Service.ImageService;
 import com.Agari.TT.domain.Member.Entity.Member;
 import com.Agari.TT.domain.Member.Repository.MemberRepository;
@@ -26,6 +27,8 @@ public class TrashService {
 
     private final TrashRepository trashRepository;
 
+    private final FishBowlRepository fishBowlRepository;
+
 
     public int save(MultipartFile trashImage, String loginId) throws IOException {
         String url = imageService.exec(trashImage);
@@ -51,7 +54,7 @@ public class TrashService {
 
         trashRepository.save(trash);
 
-        memberRepository.updateMemberCoin(500,member);
+        fishBowlRepository.updateMemberCoin(500,member);
 
         return 500;
     }

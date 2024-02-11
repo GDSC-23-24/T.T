@@ -15,7 +15,5 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     Optional<Member> findByLoginId(String loginId);
 
 
-    @Modifying
-    @Query("update Member m set m.coin=m.coin + ?1 where m = ?2")
-    int updateMemberCoin(int coin, Member member);
+
 }

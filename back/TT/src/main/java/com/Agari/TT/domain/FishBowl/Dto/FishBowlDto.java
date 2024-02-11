@@ -31,5 +31,15 @@ public class FishBowlDto {
         );
     }
 
+    public static FishBowlDto from(FishBowl fishBowl,String profileImageUrl){
+        return  new FishBowlDto(
+                fishBowl.getId(),
+                fishBowl.getLikesList().size(),
+                fishBowl.getCoin(),
+                MemberDto.from(fishBowl.getMember(),profileImageUrl)
+        );
+    }
+
+
 
 }

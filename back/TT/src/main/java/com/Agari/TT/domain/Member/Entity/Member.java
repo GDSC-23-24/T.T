@@ -31,9 +31,6 @@ public class Member {
 
     private String nickname;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "member")
-    private ProfileImage profileImage;
-
     @Enumerated(value = EnumType.STRING)
     private Role role;
 

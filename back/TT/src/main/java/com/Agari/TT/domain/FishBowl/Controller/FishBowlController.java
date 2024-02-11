@@ -1,14 +1,18 @@
 package com.Agari.TT.domain.FishBowl.Controller;
 
 import com.Agari.TT.domain.FishBowl.Dto.FishBowlDto;
+import com.Agari.TT.domain.FishBowl.Dto.FishBowlRankResponseDto;
 import com.Agari.TT.domain.FishBowl.Service.FishBowlService;
 import com.Agari.TT.domain.Member.Entity.MemberDetail;
+import com.Agari.TT.domain.Response.ListResponse;
 import com.Agari.TT.domain.Response.ResponseService;
 import com.Agari.TT.domain.Response.SingleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class FishBowlController {
@@ -33,6 +37,13 @@ public class FishBowlController {
     /**
      * 랭킹
      */
+    @GetMapping("/api/fish-bowl/ranking")
+    public ListResponse fishRanking(){
+        List<FishBowlRankResponseDto> fishBowlRankResponseDto = fishBowlService.rank();
+
+        return responseService.getListResponse(fishBowlRankResponseDto);
+
+    }
 
 
     /**
@@ -44,8 +55,9 @@ public class FishBowlController {
      */
 
     /**
-     * 팔로우
+     * 좋아요 목록
      */
+
 
 
 }
