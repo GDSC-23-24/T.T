@@ -12,7 +12,7 @@ const Login = () => {
     };
 
     const handleLoginPress = () => {
-        navigation.navigate('main');
+        navigation.navigate('Main');
     };
 
     return (
