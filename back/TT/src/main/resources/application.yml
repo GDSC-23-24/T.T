@@ -14,6 +14,10 @@ spring:
     url: jdbc:mysql://${DB_ENDPOINT}:${DB_PORT}/${DB_SCHEMA}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+    p6spy:
+      enable-logging: true
+      # com.p6spy.engine.spy.appender.MultiLineFormat 사용 (SingleLineFormat 대신)
+      multiline: true
   servlet:
     multipart:
       max-file-size: 30MB
@@ -24,8 +28,8 @@ spring:
     properties:
       hibernate:
         default_batch_fetch_size: 1000
-        format_sql: true
-    show-sql: true
+#        format_sql: true
+#    show-sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     generate-ddl: true
@@ -33,6 +37,9 @@ spring:
     async:
       request-timeout: -1
 
+#logging:
+#  level:
+#    p6spy: info
 
 
 jwt:

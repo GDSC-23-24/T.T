@@ -26,17 +26,10 @@ public class MemberDto {
                 member.getId(),
                 member.getLoginId(),
                 member.getNickname(),
-                null
+                member.getProfileImageUrl()
         );
     }
 
-    public static MemberDto from(Member member, String profileImageUrl){
-        return new MemberDto(
-                member.getId(),
-                member.getLoginId(),
-                member.getNickname(),
-                profileImageUrl
-        );
-    }
+
 
 }

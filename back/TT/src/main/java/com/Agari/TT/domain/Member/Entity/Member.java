@@ -31,6 +31,8 @@ public class Member {
 
     private String nickname;
 
+    private String profileImageUrl;
+
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
@@ -41,4 +43,5 @@ public class Member {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<ImageData> imageData;
+
 }

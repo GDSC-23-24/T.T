@@ -22,8 +22,11 @@ public interface FishBowlRepository extends JpaRepository<FishBowl,Long> {
 
 
     @Query("SELECT fb " +
-            "FROM FishBowl fb LEFT JOIN fb.likesList l " +
+            "FROM FishBowl fb left JOIN fb.likesList l " +
+            "join fetch fb.member m " +
             "GROUP BY fb.id " +
-            "ORDER BY COUNT(l) DESC, fb.id ASC")
+            "ORDER BY COUNT(l) DESC")
     List<FishBowl> findAllSortByLikesCount();
+
+
 }

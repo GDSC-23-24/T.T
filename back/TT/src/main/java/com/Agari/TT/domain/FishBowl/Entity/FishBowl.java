@@ -21,10 +21,13 @@ public class FishBowl {
 
     private Integer coin;
 
-    @OneToMany(fetch = FetchType.LAZY)
+
+    // one to many는 패치 쓰면 안됨.
+    @OneToMany(mappedBy = "fishBowl" ,fetch = FetchType.LAZY)
     List<Likes> likesList;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name = "member_id")
     private Member member;
 
 }

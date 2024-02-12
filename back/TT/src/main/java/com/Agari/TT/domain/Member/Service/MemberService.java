@@ -2,15 +2,12 @@ package com.Agari.TT.domain.Member.Service;
 
 import com.Agari.TT.domain.FishBowl.Entity.FishBowl;
 import com.Agari.TT.domain.FishBowl.Repository.FishBowlRepository;
-import com.Agari.TT.domain.ImageData.Entity.ImageData;
 import com.Agari.TT.domain.ImageData.Service.ImageService;
 import com.Agari.TT.domain.Member.Dto.SignInDto;
 import com.Agari.TT.domain.Member.Dto.SignUpDto;
 import com.Agari.TT.domain.Member.Entity.Enum.Role;
 import com.Agari.TT.domain.Member.Entity.Member;
-import com.Agari.TT.domain.Member.Entity.ProfileImage;
 import com.Agari.TT.domain.Member.Repository.MemberRepository;
-import com.Agari.TT.domain.Member.Repository.ProfileImageRepository;
 import com.Agari.TT.domain.Response.CommonResponse;
 import com.Agari.TT.global.Exception.CustomErrorCode;
 import com.Agari.TT.global.Exception.CustomException;
@@ -47,8 +44,6 @@ public class MemberService {
 
     private final ImageService imageService;
 
-    private final ProfileImageRepository profileImageRepository;
-
     private final JwtTokenProvider jwtTokenProvider;
 
     private final FishBowlRepository fishBowlRepository;
@@ -65,13 +60,30 @@ public class MemberService {
         if(presentMember.isPresent()) return new CommonResponse("이미 존재하는 회원입니다.",false);
 
 
+        Member member;
 
-        Member member = Member.builder()
-                .loginId(signUpDto.getLoginId())
-                .password(signUpDto.getPassword())
-                .nickname(signUpDto.getNickname())
-                .role(Role.USER)
-                .build();
+        if (profileImage.isEmpty()){
+            member = Member.builder()
+                    .loginId(signUpDto.getLoginId())
+                    .password(signUpDto.getPassword())
+                    .nickname(signUpDto.getNickname())
+                    .role(Role.USER)
+                    .build();
+        }
+
+        else{
+
+            String url = this.exec(profileImage);
+
+            member = Member.builder()
+                    .loginId(signUpDto.getLoginId())
+                    .password(signUpDto.getPassword())
+                    .nickname(signUpDto.getNickname())
+                    .profileImageUrl(url)
+                    .role(Role.USER)
+                    .build();
+        }
+
 
         memberRepository.save(member);
 
@@ -84,20 +96,7 @@ public class MemberService {
         fishBowlRepository.save(fishBowl);
 
 
-        if(profileImage.isEmpty()) return new CommonResponse(member.getNickname() + " 회원님 성공적으로 저장되었습니다.");
-
-
-        String url = this.exec(profileImage);
-
-        ProfileImage profileImageBuilder = ProfileImage.builder()
-                .name(profileImage.getOriginalFilename())
-                .profileImageUrl(url)
-                .member(member)
-                .build();
-
-        profileImageRepository.save(profileImageBuilder);
-
-        return new CommonResponse(member.getNickname()+" 회원님 프로필이미지와 함께 성공적으로 저장되었습니다.");
+        return new CommonResponse(member.getNickname()+"님 회원가입이 완료되었습니다.");
 
     }
 
