@@ -2,6 +2,7 @@ package com.Agari.TT.domain.FishBowl.Repository;
 
 import com.Agari.TT.domain.FishBowl.Dto.FishBowlRankResponseDto;
 import com.Agari.TT.domain.FishBowl.Entity.FishBowl;
+import com.Agari.TT.domain.Likes.Entity.Likes;
 import com.Agari.TT.domain.Member.Entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,6 +28,10 @@ public interface FishBowlRepository extends JpaRepository<FishBowl,Long> {
             "GROUP BY fb.id " +
             "ORDER BY COUNT(l) DESC")
     List<FishBowl> findAllSortByLikesCount();
+
+
+    @Query("select fb from FishBowl fb join fetch fb.likesList l where l in ?1")
+    List<FishBowl> findAllByMemberLikes(List<Likes> likes);
 
 
 }

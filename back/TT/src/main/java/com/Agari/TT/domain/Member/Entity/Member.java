@@ -1,7 +1,10 @@
 package com.Agari.TT.domain.Member.Entity;
 
+import com.Agari.TT.domain.FishBowl.Entity.FishBowl;
 import com.Agari.TT.domain.ImageData.Entity.ImageData;
+import com.Agari.TT.domain.Likes.Entity.Likes;
 import com.Agari.TT.domain.Member.Entity.Enum.Role;
+import com.Agari.TT.domain.Trash.Entity.Trash;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -39,9 +42,16 @@ public class Member {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    private LocalDateTime updatedAt;
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+//    private List<ImageData> imageData;
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "member")
+    private List<Likes> likes;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
-    private List<ImageData> imageData;
+    private List<Trash> trashes;
+
+    @OneToOne
+    private FishBowl fishBowl;
 
 }

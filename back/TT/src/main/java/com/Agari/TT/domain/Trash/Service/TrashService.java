@@ -45,7 +45,7 @@ public class TrashService {
         String trashType = "플라스틱";
 
         Trash trash = Trash.builder()
-                .filePath(url)
+                .trashImageUrl(url)
                 .trashType(trashType)
                 .member(member)
                 .build();

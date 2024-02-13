@@ -50,6 +50,7 @@ public class FishBowlController {
      * 커뮤니티
      */
 
+
     /**
      *  어항 방문
      */
@@ -57,6 +58,12 @@ public class FishBowlController {
     /**
      * 좋아요 목록
      */
+    @GetMapping("/api/fish-bowl/likes")
+    public ListResponse fishLikes(@AuthenticationPrincipal MemberDetail memberDetail){
+        List<FishBowlRankResponseDto> fishBowlRankResponseDtos = fishBowlService.getMyLikes(memberDetail.getUsername());
+
+        return responseService.getListResponse(fishBowlRankResponseDtos);
+    }
 
 
 
