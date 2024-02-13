@@ -1,29 +1,39 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { REACT_APP_GOOGLE_MAPS_API_KEY } from "@env";
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 
-function Main() {
-  useEffect(() => {
-    console.log(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
-  }, []);
-
+const Main = () => {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <MapView
-        style={{ flex: 1 }}
-        provider={PROVIDER_GOOGLE}
+        style={styles.map}
         initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+            latitude: 35.1085, // 초기위치 사하구
+            longitude: 128.9643, // 초기위치 사하구
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
         }}
-        // Access the API key from process.env
-        customMapStyle={REACT_APP_GOOGLE_MAPS_API_KEY}
-      />
+      >
+        <Marker
+          coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
+          title="Marker Title"
+          description="Marker Description"
+        />
+      </MapView>
     </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+});
 
 export default Main;
