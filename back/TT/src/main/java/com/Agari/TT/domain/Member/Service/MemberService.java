@@ -3,6 +3,7 @@ package com.Agari.TT.domain.Member.Service;
 import com.Agari.TT.domain.FishBowl.Entity.FishBowl;
 import com.Agari.TT.domain.FishBowl.Repository.FishBowlRepository;
 import com.Agari.TT.domain.ImageData.Service.ImageService;
+import com.Agari.TT.domain.Member.Dto.MyPageResponseDto;
 import com.Agari.TT.domain.Member.Dto.SignInDto;
 import com.Agari.TT.domain.Member.Dto.SignUpDto;
 import com.Agari.TT.domain.Member.Entity.Enum.Role;
@@ -113,6 +114,21 @@ public class MemberService {
         String token = jwtTokenProvider.createToken(signInDto.getLoginId(),member.getRole());
 
         return token;
+
+    }
+
+    /**
+     * 마이페이지
+     */
+    public MyPageResponseDto myPage(String loginId){
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+
+        MyPageResponseDto myPageResponseDto = new MyPageResponseDto(member);
+
+
+
+        return myPageResponseDto;
 
     }
 

@@ -24,7 +24,7 @@ public class Trash {
     private Long id;
 
 
-    private String filePath;
+    private String trashImageUrl;
 
     private String trashType;
 

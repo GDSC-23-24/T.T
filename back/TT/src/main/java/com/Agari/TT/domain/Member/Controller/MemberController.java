@@ -1,5 +1,6 @@
 package com.Agari.TT.domain.Member.Controller;
 
+import com.Agari.TT.domain.Member.Dto.MyPageResponseDto;
 import com.Agari.TT.domain.Member.Dto.SignInDto;
 import com.Agari.TT.domain.Member.Dto.SignUpDto;
 import com.Agari.TT.domain.Member.Entity.MemberDetail;
@@ -50,9 +51,9 @@ public class MemberController {
     @GetMapping("/api/my-page")
     public SingleResponse MyPage(@AuthenticationPrincipal MemberDetail memberDetail){
 
+        MyPageResponseDto responseDto = memberService.myPage(memberDetail.getUsername());
 
-
-        return responseService.getSingleResponse("1");
+        return responseService.getSingleResponse(responseDto);
     }
 
     /**
