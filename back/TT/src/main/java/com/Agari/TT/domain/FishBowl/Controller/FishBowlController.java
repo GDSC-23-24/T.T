@@ -10,6 +10,7 @@ import com.Agari.TT.domain.Response.SingleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -51,9 +52,16 @@ public class FishBowlController {
      */
 
 
+
     /**
      *  어항 방문
      */
+    @GetMapping("/api/fish-bowl/{member_id}")
+    public SingleResponse fishVisit(@PathVariable("member_id")Long member_id){
+        FishBowlDto fishBowlDto = fishBowlService.home(member_id);
+        return responseService.getSingleResponse(fishBowlDto);
+    }
+
 
     /**
      * 좋아요 목록

@@ -15,5 +15,8 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     Optional<Member> findByLoginId(String loginId);
 
 
+    @Query("select m from Member m left join Trash t on m.id = t.member.id where m.loginId = ?1")
+    Optional<Member> findByLoginIdJoin(String loginId);
+
 
 }

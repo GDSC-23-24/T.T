@@ -121,7 +121,7 @@ public class MemberService {
      * 마이페이지
      */
     public MyPageResponseDto myPage(String loginId){
-        Member member = memberRepository.findByLoginId(loginId)
+        Member member = memberRepository.findByLoginIdJoin(loginId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
 
         MyPageResponseDto myPageResponseDto = new MyPageResponseDto(member);
