@@ -21,30 +21,30 @@ const BottomBar = ({ }) => {
             </TouchableOpacity>
 
             <TouchableOpacity
-                style={[styles.tab, selectedTab === 'TrashAmountScreen' && styles.selectedTab]}
+                style={[styles.tab, selectedTab === 'TrashAmount' && styles.selectedTab]}
                 onPress={() => handleTabPress('TrashAmountScreen')}
             >
                 <Image style={styles.bottomImg} source={require('../../Asset/img/delete.png')}></Image>
-                <Text style={[styles.tabText, selectedTab === 'TrashAmountScreen' && styles.selectedTabText]}>Trash Amount</Text>
+                <Text style={[styles.tabText, selectedTab === 'TrashAmount' && styles.selectedTabText]}>Trash Amount</Text>
             </TouchableOpacity>
             <Image
                 source={require('../../Asset/img/logo.png')}
                 style={styles.ttLogo}
             />
             <TouchableOpacity
-                style={[styles.tab, selectedTab === 'FishBowlScreen' && styles.selectedTab]}
+                style={[styles.tab, selectedTab === 'FishBowl' && styles.selectedTab]}
                 onPress={() => handleTabPress('FishBowlScreen')}
             >
                 <Image  source={require('../../Asset/img/bowl.png')}></Image>
-                <Text style={[styles.tabText, selectedTab === 'FishBowlScreen' && styles.selectedTabText]}>Fish Bowl</Text>
+                <Text style={[styles.tabText, selectedTab === 'FishBowl' && styles.selectedTabText]}>Fish Bowl</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-                style={[styles.tab, selectedTab === 'MyPageScreen' && styles.selectedTab]}
-                onPress={() => handleTabPress('MyPageScreen')}
+                style={[styles.tab, selectedTab === 'MyPage' && styles.selectedTab]}
+                onPress={() => handleTabPress('MyPage')}
             >
                 <Image  source={require('../../Asset/img/mypage.png')}></Image>
-                <Text style={[styles.tabText, selectedTab === 'MyPageScreen' && styles.selectedTabText]}>My Page</Text>
+                <Text style={[styles.tabText, selectedTab === 'MyPage' && styles.selectedTabText]}>My Page</Text>
             </TouchableOpacity>
         </View>
     );
