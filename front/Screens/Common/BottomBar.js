@@ -33,7 +33,7 @@ const BottomBar = ({ }) => {
             />
             <TouchableOpacity
                 style={[styles.tab, selectedTab === 'FishBowl' && styles.selectedTab]}
-                onPress={() => handleTabPress('FishBowlScreen')}
+                onPress={() => handleTabPress('FishBowlHome')}
             >
                 <Image  source={require('../../Asset/img/bowl.png')}></Image>
                 <Text style={[styles.tabText, selectedTab === 'FishBowl' && styles.selectedTabText]}>Fish Bowl</Text>
