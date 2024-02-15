@@ -48,6 +48,7 @@ public class TrashService {
                 .trashImageUrl(url)
                 .trashType(trashType)
                 .member(member)
+                .status("complete")
                 .build();
 
         // 쓰레기 타입에 따른 코인 차등 부여 (추후 작성)

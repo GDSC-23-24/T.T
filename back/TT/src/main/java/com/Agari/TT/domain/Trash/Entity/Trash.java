@@ -32,6 +32,9 @@ public class Trash {
 
     private Double latitude;
 
+    // Complete, Waiting, Rejection
+    private String status;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 

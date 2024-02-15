@@ -1,7 +1,7 @@
 package com.Agari.TT.domain.Member.Dto;
 
 import com.Agari.TT.domain.Member.Entity.Member;
-import com.Agari.TT.domain.Trash.Dto.myPageTrashDto;
+import com.Agari.TT.domain.Trash.Dto.MyPageTrashDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,7 +23,7 @@ public class MyPageResponseDto {
 
     Integer trashCount;
 
-    List<myPageTrashDto> trashDtoList;
+    List<MyPageTrashDto> trashDtoList;
 
     public MyPageResponseDto(Member member){
         this.id = member.getId();
@@ -31,7 +31,7 @@ public class MyPageResponseDto {
         this.likesCount = member.getLikes().size();
         this.trashCount = member.getTrashes().size();
         this.point = member.getFishBowl().getCoin();
-        this.trashDtoList = member.getTrashes().stream().map(myPageTrashDto::from).collect(Collectors.toList());
+        this.trashDtoList = member.getTrashes().stream().map(MyPageTrashDto::from).collect(Collectors.toList());
     }
 
 
