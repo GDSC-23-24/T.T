@@ -51,7 +51,7 @@ public class Member {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<Trash> trashes;
 
-    @OneToOne
+    @OneToOne(mappedBy = "member")
     private FishBowl fishBowl;
 
 }

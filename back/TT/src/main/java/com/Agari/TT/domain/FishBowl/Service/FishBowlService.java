@@ -39,6 +39,17 @@ public class FishBowlService {
         return fishBowlDto;
     }
 
+    public FishBowlDto home(Long member_id) {
+
+        Member member = memberRepository.findById(member_id)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+
+
+        FishBowlDto fishBowlDto = FishBowlDto.from2(fishBowlRepository.findByMember(member));
+
+        return fishBowlDto;
+    }
+
     public List<FishBowlRankResponseDto> rank(){
         List<FishBowlRankResponseDto> fishBowlRankResponseDtos = fishBowlRepository.findAllSortByLikesCount()
                 .stream().map(FishBowlRankResponseDto::from).collect(Collectors.toList());

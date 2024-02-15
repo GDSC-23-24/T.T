@@ -1,5 +1,6 @@
 package com.Agari.TT.domain.ImageData.Entity;
 
+import com.Agari.TT.domain.DroneTrash.Entity.DroneTrash;
 import com.Agari.TT.domain.Member.Entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,11 +22,11 @@ public class ImageData {
     @Column(name = "image_id")
     private Long id;
 
-    private String name;
+//    private String name;
+//
+//    private String type;
 
-    private String type;
-
-    private String filePath;
+    private String imageUrl;
 
     private double longitude;
 
@@ -37,6 +38,10 @@ public class ImageData {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "drone_trash_id")
+    private DroneTrash droneTrash;
 
 
 }
