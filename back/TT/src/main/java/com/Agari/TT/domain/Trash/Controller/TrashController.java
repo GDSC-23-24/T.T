@@ -1,12 +1,14 @@
 package com.Agari.TT.domain.Trash.Controller;
 
 import com.Agari.TT.domain.Member.Entity.MemberDetail;
+import com.Agari.TT.domain.Response.CommonResponse;
 import com.Agari.TT.domain.Response.ResponseService;
 import com.Agari.TT.domain.Response.SingleResponse;
 import com.Agari.TT.domain.Trash.Service.TrashService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import org.hibernate.tool.schema.spi.CommandAcceptanceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -29,11 +31,15 @@ public class TrashController {
      */
     @Operation(summary = "쓰레기 사진 업로드 후 코인 지급")
     @PostMapping("/api/trash")
-    public SingleResponse uploadTrash( @RequestPart MultipartFile trashImage,
+    public CommonResponse uploadTrash( @RequestPart MultipartFile trashImage,
                                       @AuthenticationPrincipal MemberDetail memberDetail) throws IOException {
 
-        int coin = trashService.save(trashImage,memberDetail.getUsername());
+        String msg = trashService.save(trashImage,memberDetail.getUsername());
 
-        return responseService.getSingleResponse(coin);
+        return new CommonResponse(msg);
     }
+
+
+
+
 }

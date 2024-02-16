@@ -30,7 +30,7 @@ public class TrashService {
     private final FishBowlRepository fishBowlRepository;
 
 
-    public int save(MultipartFile trashImage, String loginId) throws IOException {
+    public String save(MultipartFile trashImage, String loginId) throws IOException {
         String url = imageService.exec(trashImage);
 
         Member member =  memberRepository.findByLoginId(loginId)
@@ -38,25 +38,50 @@ public class TrashService {
 
         // 여기서 이제 ai랑 연동하는데 내가 url만 주면 바로 사진 가져가서 분석이 가능한 지 (지금은 대충 받았다고 치겠음)
 
-
+        Trash trash;
+        String msg;
         // 여기서 식별 실패하면 관리자에게 인증요청하기
+        if(false){
+            trash = Trash.builder()
+                    .trashImageUrl(url)
+                    .member(member)
+                    .status("waiting")
+                    .build();
+
+            trashRepository.save(trash);
+
+            msg = "관리자 승인 요청 대기 중";
+        }
+        else{
+            String trashType = "플라스틱";
+
+            trash = Trash.builder()
+                    .trashImageUrl(url)
+                    .trashType(trashType)
+                    .member(member)
+                    .status("complete")
+                    .build();
+
+            trashRepository.save(trash);
+
+            // 여기서 쓰레기 타입에 따른 코인 차등 부여
+
+            fishBowlRepository.updateMemberCoin(500,member);
+
+            msg = "500코인이 적립되었습니다.";
+        }
 
 
-        String trashType = "플라스틱";
 
-        Trash trash = Trash.builder()
-                .trashImageUrl(url)
-                .trashType(trashType)
-                .member(member)
-                .status("complete")
-                .build();
 
-        // 쓰레기 타입에 따른 코인 차등 부여 (추후 작성)
 
-        trashRepository.save(trash);
 
-        fishBowlRepository.updateMemberCoin(500,member);
+        return msg;
+    }
 
-        return 500;
+    /**
+     * 관리자에게 요청하기
+     */
+    public int requestAdmin(MultipartFile trashImage, String loginId) {
     }
 }
