@@ -22,6 +22,8 @@ public class FishBowl {
 
     private Integer coin;
 
+    private Integer viewCount;
+
     @OneToMany(mappedBy = "fishBowl",fetch = FetchType.LAZY)
     List<BowlComponent> components;
 

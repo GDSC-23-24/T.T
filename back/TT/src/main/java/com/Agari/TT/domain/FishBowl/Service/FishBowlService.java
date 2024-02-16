@@ -28,7 +28,7 @@ public class FishBowlService {
 
     private final MemberRepository memberRepository;
 
-    public FishBowlDto home(String loginId) {
+    public FishBowlDto visitHome(String loginId) {
 
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
@@ -39,13 +39,18 @@ public class FishBowlService {
         return fishBowlDto;
     }
 
-    public FishBowlDto home(Long member_id) {
+    public FishBowlDto visitHome(Long member_id) {
 
         Member member = memberRepository.findById(member_id)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
 
 
-        FishBowlDto fishBowlDto = FishBowlDto.from2(fishBowlRepository.findByMember(member));
+
+        FishBowl fishBowl = fishBowlRepository.findByMember(member);
+
+        fishBowlRepository.updateViewCount(fishBowl);
+
+        FishBowlDto fishBowlDto = FishBowlDto.from2(fishBowl);
 
         return fishBowlDto;
     }

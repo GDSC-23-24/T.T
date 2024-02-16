@@ -3,7 +3,7 @@ package com.Agari.TT.global.Exception;
 import org.springframework.http.HttpStatus;
 
 public enum CustomErrorCode {
-    CLUB_NOT_FOUND(HttpStatus.BAD_REQUEST,"존재하지 않는 클럽입니다."),
+    FISHBOWL_NOT_FOUND(HttpStatus.BAD_REQUEST,"존재하지 않는 클럽입니다."),
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST,"존재하지 않는 사용자입니다."),
 
     APPLICANT_NOT_FOUND(HttpStatus.BAD_REQUEST,"존재하지 않는 신청자입니다."),

@@ -20,6 +20,8 @@ public class FishBowlDto {
 
     Integer coin;
 
+    Integer viewCount;
+
     MemberDto memberDto;
 
     public static FishBowlDto from(FishBowl fishBowl){
@@ -27,6 +29,7 @@ public class FishBowlDto {
                 fishBowl.getId(),
                 fishBowl.getLikesList().size(),
                 fishBowl.getCoin(),
+                fishBowl.getViewCount(),
                 MemberDto.from(fishBowl.getMember())
         );
     }
@@ -36,6 +39,7 @@ public class FishBowlDto {
                 fishBowl.getId(),
                 fishBowl.getLikesList().size(),
                 null,
+                fishBowl.getViewCount() + 1,
                 MemberDto.from(fishBowl.getMember())
         );
     }

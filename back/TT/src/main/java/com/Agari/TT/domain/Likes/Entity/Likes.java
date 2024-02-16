@@ -2,6 +2,7 @@ package com.Agari.TT.domain.Likes.Entity;
 
 import com.Agari.TT.domain.FishBowl.Entity.FishBowl;
 import com.Agari.TT.domain.Member.Entity.Member;
+import com.Agari.TT.domain.Trash.Entity.Trash;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +26,5 @@ public class Likes {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     Member member;
-
 
 }

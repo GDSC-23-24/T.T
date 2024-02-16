@@ -31,7 +31,7 @@ public class FishBowlController {
 
     @GetMapping("/api/fish-bowl/home")
     public SingleResponse fishHome(@AuthenticationPrincipal MemberDetail memberDetail){
-        FishBowlDto fishBowlDto = fishBowlService.home(memberDetail.getUsername());
+        FishBowlDto fishBowlDto = fishBowlService.visitHome(memberDetail.getUsername());
         return responseService.getSingleResponse(fishBowlDto);
     }
 
@@ -50,6 +50,10 @@ public class FishBowlController {
     /**
      * 커뮤니티
      */
+    @GetMapping("/api/fish-bowl/community")
+    public SingleResponse fishCommunity(@AuthenticationPrincipal MemberDetail memberDetail){
+
+    }
 
 
 
@@ -58,7 +62,7 @@ public class FishBowlController {
      */
     @GetMapping("/api/fish-bowl/{member_id}")
     public SingleResponse fishVisit(@PathVariable("member_id")Long member_id){
-        FishBowlDto fishBowlDto = fishBowlService.home(member_id);
+        FishBowlDto fishBowlDto = fishBowlService.visitHome(member_id);
         return responseService.getSingleResponse(fishBowlDto);
     }
 

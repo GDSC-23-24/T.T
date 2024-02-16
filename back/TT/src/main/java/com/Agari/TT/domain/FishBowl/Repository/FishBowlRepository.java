@@ -1,6 +1,5 @@
 package com.Agari.TT.domain.FishBowl.Repository;
 
-import com.Agari.TT.domain.FishBowl.Dto.FishBowlRankResponseDto;
 import com.Agari.TT.domain.FishBowl.Entity.FishBowl;
 import com.Agari.TT.domain.Likes.Entity.Likes;
 import com.Agari.TT.domain.Member.Entity.Member;
@@ -34,4 +33,6 @@ public interface FishBowlRepository extends JpaRepository<FishBowl,Long> {
     List<FishBowl> findAllByMemberLikes(List<Likes> likes);
 
 
+    @Query("update FishBowl fb set fb.viewCount= fb.viewCount + 1 where fb = ?1")
+    void updateViewCount(FishBowl fishBowl);
 }

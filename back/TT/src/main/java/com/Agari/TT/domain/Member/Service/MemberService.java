@@ -15,23 +15,14 @@ import com.Agari.TT.domain.Trash.Repository.TrashRepository;
 import com.Agari.TT.global.Exception.CustomErrorCode;
 import com.Agari.TT.global.Exception.CustomException;
 import com.Agari.TT.global.Jwt.JwtTokenProvider;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.BlobInfo;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -96,6 +87,7 @@ public class MemberService {
 
         FishBowl fishBowl = FishBowl.builder()
                 .coin(0)
+                .viewCount(0)
                 .member(member)
                 .build();
 
