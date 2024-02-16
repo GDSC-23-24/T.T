@@ -1,6 +1,7 @@
 package com.Agari.TT.domain.Trash.Repository;
 
 import com.Agari.TT.domain.Trash.Dto.MyPageTrashDto;
+import com.Agari.TT.domain.Trash.Dto.TrashDto;
 import com.Agari.TT.domain.Trash.Entity.Trash;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,4 +14,7 @@ public interface TrashRepository extends JpaRepository<Trash,Long> {
 
     @Query("select t from Trash t left join t.member m on m.loginId = ?1 ")
     List<MyPageTrashDto> findByLoginId(String loginId);
+
+    @Query("SELECT t FROM Trash t JOIN FETCH t.member ORDER BY t.createdAt DESC")
+    List<Trash> findRecentImage();
 }

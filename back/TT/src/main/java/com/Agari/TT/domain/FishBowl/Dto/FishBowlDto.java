@@ -44,6 +44,17 @@ public class FishBowlDto {
         );
     }
 
+    public static FishBowlDto from3(FishBowl fishBowl){
+        return  new FishBowlDto(
+                fishBowl.getId(),
+                fishBowl.getLikesList().size(),
+                null,
+                null,
+                MemberDto.from(fishBowl.getMember())
+        );
+    }
+
+
 
 
 

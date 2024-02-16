@@ -1,5 +1,6 @@
 package com.Agari.TT.domain.FishBowl.Controller;
 
+import com.Agari.TT.domain.FishBowl.Dto.CommunityDto;
 import com.Agari.TT.domain.FishBowl.Dto.FishBowlDto;
 import com.Agari.TT.domain.FishBowl.Dto.FishBowlRankResponseDto;
 import com.Agari.TT.domain.FishBowl.Service.FishBowlService;
@@ -52,7 +53,9 @@ public class FishBowlController {
      */
     @GetMapping("/api/fish-bowl/community")
     public SingleResponse fishCommunity(@AuthenticationPrincipal MemberDetail memberDetail){
+        CommunityDto communityDto = fishBowlService.getCommunity(memberDetail.getUsername());
 
+        return responseService.getSingleResponse(communityDto);
     }
 
 
