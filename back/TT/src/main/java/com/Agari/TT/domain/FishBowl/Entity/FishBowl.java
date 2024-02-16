@@ -1,5 +1,6 @@
 package com.Agari.TT.domain.FishBowl.Entity;
 
+import com.Agari.TT.domain.BowlComponent.Entity.BowlComponent;
 import com.Agari.TT.domain.Likes.Entity.Likes;
 import com.Agari.TT.domain.Member.Entity.Member;
 import jakarta.persistence.*;
@@ -20,6 +21,9 @@ public class FishBowl {
     private Long id;
 
     private Integer coin;
+
+    @OneToMany(mappedBy = "fishBowl",fetch = FetchType.LAZY)
+    List<BowlComponent> components;
 
 
     // one to many는 패치 쓰면 안됨.
