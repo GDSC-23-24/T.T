@@ -1,5 +1,7 @@
 package com.Agari.TT.domain.FishBowl.Service;
 
+import com.Agari.TT.domain.BowlComponent.Dto.ComponentResponseDto;
+import com.Agari.TT.domain.BowlComponent.Repository.BowlRepository;
 import com.Agari.TT.domain.FishBowl.Dto.CommunityDto;
 import com.Agari.TT.domain.FishBowl.Dto.FishBowlDto;
 import com.Agari.TT.domain.FishBowl.Dto.FishBowlRankResponseDto;
@@ -38,6 +40,8 @@ public class FishBowlService {
 
     private final LikesRepository likesRepository;
 
+    private final BowlRepository bowlRepository;
+
     public FishBowlDto visitHome(String loginId) {
 
         Member member = memberRepository.findByLoginId(loginId)
@@ -45,6 +49,10 @@ public class FishBowlService {
 
 
         FishBowlDto fishBowlDto = FishBowlDto.from(fishBowlRepository.findByMember(member));
+
+        fishBowlDto.setComponentResponseDtoList(bowlRepository.findAllByFishBowlId(fishBowlDto.getId())
+                .stream().map(ComponentResponseDto::from).collect(Collectors.toList())
+        );
 
         return fishBowlDto;
     }
@@ -61,6 +69,10 @@ public class FishBowlService {
         fishBowlRepository.updateViewCount(fishBowl);
 
         FishBowlDto fishBowlDto = FishBowlDto.from2(fishBowl);
+
+        fishBowlDto.setComponentResponseDtoList(bowlRepository.findAllByFishBowlId(fishBowlDto.getId())
+                .stream().map(ComponentResponseDto::from).collect(Collectors.toList())
+        );
 
         return fishBowlDto;
     }

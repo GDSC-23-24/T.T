@@ -33,6 +33,7 @@ public interface FishBowlRepository extends JpaRepository<FishBowl,Long> {
     List<FishBowl> findAllByMemberLikes(List<Likes> likes);
 
 
+    @Modifying
     @Query("update FishBowl fb set fb.viewCount= fb.viewCount + 1 where fb = ?1")
     void updateViewCount(FishBowl fishBowl);
 }
