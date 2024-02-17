@@ -30,6 +30,7 @@ spring:
         default_batch_fetch_size: 1000
 #        format_sql: true
 #    show-sql: true
+
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     generate-ddl: true
@@ -39,7 +40,7 @@ spring:
 
 #logging:
 #  level:
-#    p6spy: info
+#    root: debug
 
 
 jwt:
