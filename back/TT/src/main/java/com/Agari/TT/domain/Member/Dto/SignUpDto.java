@@ -15,6 +15,4 @@ public class SignUpDto {
     String password;
 
     String nickname;
-
-
 }
