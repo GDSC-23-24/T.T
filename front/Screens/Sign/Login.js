@@ -6,15 +6,40 @@ const Login = () => {
     const navigation = useNavigation();
     const [showPassword, setShowPassword] = useState(false);
     const [password, setPassword] = useState('');
+    const [loginId, setloginId] = useState('');
     
     const handleSignUpPress = () => {
         navigation.navigate('SignUp');
     };
-
-    const handleLoginPress = () => {
-        navigation.navigate('Main');
-    };
-
+    const handleLoginPress = async () => {
+        signInDto = {
+          loginId: loginId, // 사용자 ID
+          password: password, // 사용자 비밀번호
+        };
+    
+        const options = {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(signInDto),
+        };
+    
+        try {
+          const response = await fetch('http://10.0.2.2:8080/sign-in', options);
+          if (response.ok) {
+            const responseJson = await response.json();
+            console.log('로그인 성공:', responseJson);
+            navigation.navigate('FishBowlHome');
+          } else {
+            console.log('로그인 실패:', response.status);
+          }
+        } catch (error) {
+          console.error('로그인 에러:', error);
+        }
+    
+      };
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -29,7 +54,12 @@ const Login = () => {
 
             <View style={styles.inputContainer}>
                 <Text style={styles.label}>ID</Text>
-                <TextInput style={styles.input} placeholder="Please enter your ID" />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Please Enter A ID"
+                    value={loginId}
+                    onChangeText={(text) => setloginId(text)}
+                />
             </View>
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                     <Text style={styles.show}>{showPassword ? 'Hide' : 'Show'}</Text>
@@ -38,7 +68,7 @@ const Login = () => {
             <Text style={styles.label}>Password</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Please enter your password"
+                    placeholder="Please Enter Your Password"
                     secureTextEntry={!showPassword} 
                     value={password}
                     onChangeText={(text) => setPassword(text)}

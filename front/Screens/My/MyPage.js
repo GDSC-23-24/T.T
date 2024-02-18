@@ -1,11 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import BottomBar from '../Common/BottomBar';
 import { useNavigation } from '@react-navigation/native';
-
+import { API_TOKEN } from '../../API';
 const MyPage = () => {
 
     const navigation = useNavigation();
+    const [userData, setUserData] = useState(null);
+
+    useEffect(() => {
+        fetchMyPage();
+    }, []);
+    const fetchMyPage = async () => {
+        const options = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                Authorization: 'Bearer ' + API_TOKEN,
+            },
+        };
+
+        try {
+            const response = await fetch('http://10.0.2.2:8080/api/my-page', options);
+            if (response.ok) {
+                const data = await response.json();
+                setUserData(data.data);
+                console.log('User Data:', data.data.likesCount);
+            } else {
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
     const handleLogOutPress = () => {
         navigation.navigate('Welcome');
     }; 
@@ -35,16 +61,26 @@ const MyPage = () => {
                 {/* User Information */}
                 <View style={styles.userInfoContainer}>
                     <Text style={styles.name}>Name</Text>
-                    <Text style={styles.name}>About me</Text>
+                    <Text style={styles.name1}> {userData?.nickname || ''} </Text>
                 </View>
+                    <Text style={styles.name}>About me</Text>
+                
 
                 {/* User Stats */}
                 <View style={styles.statsContainer}>
                     <View style={styles.statBox}>
+                        <View style={styles.statBox1}>
+                        <Text style={styles.state}> {userData?.likesCount || ''} </Text>
+                        <Text style={styles.state}> {userData?.point || ''} </Text>
+                        <Text style={styles.state}> {userData?.waitingCount || ''} </Text>
+                        <Text style={styles.state}> {userData?.completeCount || ''} </Text>
+                        </View>
+                        <View style={styles.statBox2}>
                         <Text style={styles.statText}>Likes</Text>
                         <Text style={styles.statText}>My Point</Text>
                         <Text style={styles.statText}>Waiting</Text>
                         <Text style={styles.statText}>complete</Text>
+                        </View>
                     </View>
                 </View>
 
@@ -114,18 +150,24 @@ const styles = StyleSheet.create({
     },
     userInfoContainer: {
         marginTop: 25,
+        flexDirection: 'row',
     },
     name: {
         fontSize: 13,
         fontWeight: '600',
         color: '#adadad',
     },
+    name1: {
+        fontSize: 20,
+        fontWeight: '600',
+        color: '#404040',
+    },
     statsContainer: {
         marginTop: 26.5,
         flexDirection: 'row',
     },
     statBox: {
-        flexDirection: 'row',
+        flexDirection: 'columm',
         width: 353,
         height: 78,
         padding: 18,
@@ -133,6 +175,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderColor: '#bdd4ff',
         borderWidth: 1,
+        justifyContent: 'space-around'
+    },
+    statBox1: {
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+    },
+    statBox2: {
+        flexDirection: 'row',
         justifyContent: 'space-around'
     },
     sectionHeader: {
@@ -150,6 +200,13 @@ const styles = StyleSheet.create({
     arrowButtonText: {
         fontSize: 20,
         color: '#0057ff',
+    },
+    state:{
+        fontSize: 20,
+        fontWeight: '500',
+        textAlign: 'center',
+        color: '#3d3d3d',
+        fontWeight: '500'
     },
     statText: {
         fontSize: 12,

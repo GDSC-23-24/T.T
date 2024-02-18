@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Svg, { Image as SvgImage } from 'react-native-svg';
+import { launchImageLibrary } from 'react-native-image-picker';
+
+
 
 const SignUp = () => {
     const navigation = useNavigation();
@@ -10,10 +13,64 @@ const SignUp = () => {
     const [nickname, setNickname] = useState('');
     const [userID, setUserID] = useState('');
     const [verifyPassword, setVerifyPassword] = useState('');
+    const [profileImageUri, setProfileImageUri] = useState(null);
 
-    const handleSignUpPress = () => {
-        navigation.navigate('SignUp');
+    const handleProfileImagePress = () => {
+        const options = {
+            mediaType: 'photo',
+            quality: 1,
+        };
+
+        launchImageLibrary(options, (response) => {
+            if (response.uri) {
+                setProfileImageUri(response.uri);
+            }
+        });
     };
+    const handlePersonImagePress = () => {
+        // Trigger the profile image selection when personImage is pressed
+        handleProfileImagePress();
+    };
+
+    const handleSignUpPress = async () => {
+        const formData = new FormData();
+        var signUpDto = {
+            loginId: userID,
+            password: password,
+            nickname: nickname,
+        };
+        formData.append('profileImage', {
+            uri: 'https://storage.googleapis.com/tt_solution_challenge/7e8d18c2-1e1a-4826-8f17-9351637bcdd0',
+            type: 'image/jpg',
+            name: 'profile.jpg',
+          });
+        const json = JSON.stringify(signUpDto);
+        formData.append('signUpDto', json);
+        // Perform the signup API call
+        try {
+            const response = await fetch('http://10.0.2.2:8080/api/sign-up', {
+                method: 'POST',
+                body: formData,
+                headers: {},
+            });
+
+            // Handle the response
+            const result = await response.json();
+            console.log(result);
+
+            // Navigate to the next screen if signup is successful
+            if (result.success) {
+                navigation.navigate('Login'); // Replace 'NextScreen' with the actual screen name you want to navigate to
+            } else {
+                // Handle unsuccessful signup
+                console.log('Signup failed:', result.error);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+        console.log('Selected Image URI:', profileImageUri);
+    };
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -22,10 +79,18 @@ const SignUp = () => {
             </View>
 
             <View style={styles.top}>
-                <Text style={styles.enter}>Enter your</Text>
-                <View style={styles.highlight}>
+                <View style={styles.enterContainer}>
+                    <Text style={styles.enter}>Enter your</Text>
+                    <Text style={styles.highlightText}>Information And Photo</Text>
                 </View>
-                <Text style={styles.highlightText}>information and photo</Text>
+                <TouchableOpacity style={styles.add} onPress={handleProfileImagePress}>
+                {profileImageUri ? (
+                    <Image source={{ uri: profileImageUri }} style={styles.addImage} />
+                ) : (
+                    <Image source={require('../../Asset/img/person.png')} style={styles.personImage} />
+                )}
+                <Image source={require('../../Asset/img/addIcon.png')} style={styles.addIcon} />
+            </TouchableOpacity>
             </View>
             <View style={styles.box} >
                 <Text style={styles.nickname}>Nickname</Text>
@@ -92,8 +157,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     top: {
-        marginTop:80,
-        flexDirection: 'columm',
+        marginTop: 30,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     signUpText: {
         fontFamily: 'NotoSansKR',
@@ -112,12 +179,6 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#404040',
     },
-    highlight: {
-        marginTop: 15,
-        width: 203,
-        height: 11,
-        backgroundColor: '#bdd4ff',
-    },
     highlightText: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -125,7 +186,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 40,
     },
-    box:{
+    box: {
         marginTop: 30
     },
     nickname: {
@@ -156,8 +217,8 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: 'bold',
         color: '#adadad',
-        position:'absolute',
-        right:10,
+        position: 'absolute',
+        right: 10,
         top: 100
     },
     password: {
@@ -185,9 +246,9 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: 'bold',
         color: '#0057ff',
-        position:'absolute',
+        position: 'absolute',
         top: 180,
-        right:10,
+        right: 10,
     },
     vector4: {
         width: 353,
@@ -234,6 +295,32 @@ const styles = StyleSheet.create({
         fonsize: 13,
         color: '#939393',
     },
+    selectedImage: {
+        width: 150,
+        height: 150,
+        marginVertical: 20,
+        borderRadius: 75,
+    },
+    enterContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    addImage: {
+        width: 23.3,
+        height: 23.3,
+        borderRadius: 12,
+    },
+    personImage: {
+        width: 150,
+        height: 150,
+        borderRadius: 12,
+        resizeMode: 'contain',
+    },
+    addIcon:{
+        position:'absolute',
+        top: 45,
+        right: 55
+    }
 });
 
 export default SignUp;
