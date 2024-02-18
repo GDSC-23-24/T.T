@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -73,5 +74,9 @@ public class ImageService {
 
     public void saveAll(List<ImageData> imageDataList){
         imageDataRepository.saveAll(imageDataList);
+    }
+
+    public List<ImageData> findAll() {
+        return imageDataRepository.findAll();
     }
 }
