@@ -1,6 +1,7 @@
 import sys
 import torch
 from torchvision import models, transforms
+import torch.nn.functional as F
 import torch.nn as nn
 import requests
 from PIL import Image
@@ -48,10 +49,12 @@ def predict_label_from_image_url(image_url, model, transformations, class_labels
 
     with torch.no_grad():
         outputs = model(img_transformed)
-        _, preds = torch.max(outputs, dim=1)
+        probs = F.softmax(outputs, dim=1)  # 확률 계산
+        max_prob, preds = torch.max(probs, dim=1)
         predicted_label = class_labels[preds[0].item()]
+        predicted_probability = max_prob.item()  # 확률 값
 
-    return predicted_label
+    return predicted_label, predicted_probability
 
 
 # 이미지 URL 예시
@@ -60,6 +63,7 @@ def predict_label_from_image_url(image_url, model, transformations, class_labels
 image_url = sys.argv[1]  # 커맨드 라인 인자로부터 이미지 URL을 받습니다.
 
 # 예측 실행 및 결과 출력
-predicted_label = predict_label_from_image_url(
+predicted_label, predicted_probability = predict_label_from_image_url(
     image_url, model, transformations, class_labels)
-print("Predicted Label:", predicted_label)
+print(
+    f"Predicted Label: {predicted_label},Probability: {predicted_probability}")
