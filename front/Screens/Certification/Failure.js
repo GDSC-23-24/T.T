@@ -19,9 +19,6 @@ const Failure = () => {
                         <TouchableOpacity style={styles.tryButton} onPress={handleTryagain}>
                             <Text style={styles.buttonText}>try again</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.contactButton}>
-                            <Text style={styles.buttonText}>contact us</Text>
-                        </TouchableOpacity>
                     </View>
                 </View>
             </ScrollView>
@@ -79,13 +76,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 2,
         borderColor: '#bdd4ff',
-    },
-    contactButton: {
-        width : 150,
-        height:50,
-        padding: 12,
-        borderRadius: 10,
-        backgroundColor: '#0057ff',
     },
 });
 
