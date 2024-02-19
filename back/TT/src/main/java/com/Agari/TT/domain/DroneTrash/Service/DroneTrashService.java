@@ -1,6 +1,7 @@
 package com.Agari.TT.domain.DroneTrash.Service;
 
 import com.Agari.TT.domain.DroneTrash.Dto.LocationDto;
+import com.Agari.TT.domain.DroneTrash.Dto.MapDto;
 import com.Agari.TT.domain.DroneTrash.Entity.DroneTrash;
 import com.Agari.TT.domain.DroneTrash.Repository.DroneTrashRepository;
 import com.Agari.TT.domain.ImageData.Entity.ImageData;
@@ -29,6 +30,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -85,5 +87,10 @@ public class DroneTrashService {
     }
 
 
+    public List<MapDto> getTrashMap() {
+        List<MapDto> mapDtos = imageService.findAll().stream().map(MapDto::from).collect(Collectors.toList());
 
+        return mapDtos;
+
+    }
 }
