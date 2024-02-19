@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, TextInput } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Image, TextInput,Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Svg, { Image as SvgImage } from 'react-native-svg';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -14,44 +14,68 @@ const SignUp = () => {
     const [userID, setUserID] = useState('');
     const [verifyPassword, setVerifyPassword] = useState('');
     const [profileImageUri, setProfileImageUri] = useState(null);
+    const [response, setResponse] = useState(null);
+    const [defaultImageVisible, setDefaultImageVisible] = useState(false);
 
-    const handleProfileImagePress = () => {
-        const options = {
-            mediaType: 'photo',
-            quality: 1,
-        };
 
-        launchImageLibrary(options, (response) => {
-            if (response.uri) {
-                setProfileImageUri(response.uri);
-            }
-        });
+    const onSelectImage = () => {
+        launchImageLibrary(
+            {
+                mediaType: 'photo',
+                maxWidth: 512,
+                maxHeight: 512,
+                includeBase64: Platform.OS === 'android',
+            },
+            (response) => {
+                if (!response.didCancel) {
+                    setResponse(response);
+                    setDefaultImageVisible(false); // Reset to hide the default image when a new image is selected
+                }
+            },
+        );
+        
     };
-    const handlePersonImagePress = () => {
-        // Trigger the profile image selection when personImage is pressed
-        handleProfileImagePress();
-    };
+
 
     const handleSignUpPress = async () => {
-        const formData = new FormData();
-        var signUpDto = {
-            loginId: userID,
-            password: password,
-            nickname: nickname,
-        };
-        formData.append('profileImage', {
-            uri: 'https://storage.googleapis.com/tt_solution_challenge/7e8d18c2-1e1a-4826-8f17-9351637bcdd0',
-            type: 'image/jpg',
-            name: 'profile.jpg',
-          });
-        const json = JSON.stringify(signUpDto);
-        formData.append('signUpDto', json);
+        // Perform additional validation or checks as needed
+        if (!nickname || !userID || !password || !verifyPassword) {
+            Alert.alert('Please fill in all the fields');
+            return;
+        }
+
         // Perform the signup API call
+        if (!response && !defaultImageVisible) {
+            Alert.alert('Please select an image first');
+            return;
+        }
+
+        // The rest of your upload logic...
+
+        // If the image is not selected and the default image is visible, handle the default image logic
+        if (!response && defaultImageVisible) {
+            console.log('Handling default image logic');
+            // Add your logic to handle the default image scenario
+        }
+
         try {
+            const formData = new FormData();
+            formData.append('loginId', userID);
+            formData.append('password', password);
+            formData.append('nickname', nickname);
+
+            if (profileImageUri) {
+                const imageFileName = profileImageUri.split('/').pop();
+                formData.append('profileImage', {
+                    uri: profileImageUri,
+                    type: 'image/jpeg',
+                    name: 'profileImage.jpg',
+                });
+                
+            }
             const response = await fetch('http://10.0.2.2:8080/api/sign-up', {
                 method: 'POST',
                 body: formData,
-                headers: {},
             });
 
             // Handle the response
@@ -60,7 +84,7 @@ const SignUp = () => {
 
             // Navigate to the next screen if signup is successful
             if (result.success) {
-                navigation.navigate('Login'); // Replace 'NextScreen' with the actual screen name you want to navigate to
+                navigation.navigate('Login'); // Replace 'Login' with the actual screen name you want to navigate to
             } else {
                 // Handle unsuccessful signup
                 console.log('Signup failed:', result.error);
@@ -68,7 +92,6 @@ const SignUp = () => {
         } catch (error) {
             console.error(error);
         }
-        console.log('Selected Image URI:', profileImageUri);
     };
 
 
@@ -83,14 +106,17 @@ const SignUp = () => {
                     <Text style={styles.enter}>Enter your</Text>
                     <Text style={styles.highlightText}>Information And Photo</Text>
                 </View>
-                <TouchableOpacity style={styles.add} onPress={handleProfileImagePress}>
-                {profileImageUri ? (
-                    <Image source={{ uri: profileImageUri }} style={styles.addImage} />
+                <Pressable style={styles.circle} onPress={onSelectImage}>
+                {(response && !defaultImageVisible) ? (
+                    <Image source={{ uri: response.assets[0].uri }} style={{ width: 100, height: 100, borderRadius: 50 }} />
                 ) : (
-                    <Image source={require('../../Asset/img/person.png')} style={styles.personImage} />
+                    <Image
+                        source={require('../../Asset/img/none.png')}
+                        style={{ width: 100, height: 100, borderRadius: 50, resizeMode: 'contain' }}
+                    />
                 )}
-                <Image source={require('../../Asset/img/addIcon.png')} style={styles.addIcon} />
-            </TouchableOpacity>
+            </Pressable>
+
             </View>
             <View style={styles.box} >
                 <Text style={styles.nickname}>Nickname</Text>
@@ -109,7 +135,6 @@ const SignUp = () => {
                     value={userID}
                     onChangeText={setUserID}
                 />
-                <Text style={styles.available}>Available</Text>
                 <View style={styles.vector4}></View>
 
                 <Text style={styles.password}>Password</Text>
@@ -121,7 +146,6 @@ const SignUp = () => {
                     onChangeText={setPassword}
                 />
                 <TouchableOpacity style={styles.show} onPress={() => setShowPassword(!showPassword)}>
-                    <Text>{showPassword ? 'Hide' : 'Show'}</Text>
                 </TouchableOpacity>
                 <View style={styles.vector4}></View>
 
@@ -134,7 +158,7 @@ const SignUp = () => {
                     onChangeText={setVerifyPassword}
                 />
                 <TouchableOpacity style={styles.show} onPress={() => setShowPassword(!showPassword)}>
-                    <Text>{showPassword ? 'Hide' : 'Show'}</Text>
+                    <Text style={styles.showText}>{showPassword ? 'Hide' : 'Show'}</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.vector4}></View>
@@ -213,14 +237,6 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         color: '#939393',
     },
-    available: {
-        fontSize: 13,
-        fontWeight: 'bold',
-        color: '#adadad',
-        position: 'absolute',
-        right: 10,
-        top: 100
-    },
     password: {
         width: 60,
         height: 22,
@@ -242,13 +258,14 @@ const styles = StyleSheet.create({
         color: '#939393',
     },
     show: {
-        fontFamily: 'NotoSansKR',
-        fontSize: 13,
-        fontWeight: 'bold',
-        color: '#0057ff',
         position: 'absolute',
-        top: 180,
+        top: 170,
         right: 10,
+    },
+    showText:{
+        color: '#0057ff',
+        fontSize: 17,
+        fontWeight: 'bold',
     },
     vector4: {
         width: 353,
