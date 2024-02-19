@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, 
 import BottomBar from '../Common/BottomBar';
 import TopBar from '../Common/TopBar';
 // Import the aquarium images
-import bowl0 from '../../Asset/img/fishbowl0.png';
 import bowl1 from '../../Asset/img/fishbowl1.png';
 import bowl2 from '../../Asset/img/fishbowl2.png';
 import bowl3 from '../../Asset/img/fishbowl3.png';
@@ -20,19 +19,34 @@ import seaweed from '../../Asset/img/seaweed.png';
 import seaweeds from '../../Asset/img/seaweeds.png';
 import sand from '../../Asset/img/sand.png';
 import rock from '../../Asset/img/rock.png';
+
 const FishBowlStore = () => {
     const [searchText, setSearchText] = useState('');
 
     const handleSearch = () => {
         console.log('Searching for:', searchText);
     };
-    
-    const aquariumImages = [bowl0, bowl1, bowl2, bowl3, bowl4];
+
+    const aquariumImages = [ bowl1, bowl2, bowl3, bowl4];
     const fishImages = [yellowFish, mintFish, redFish, greenFish];
     const fishColorLabels = ['Yellow', 'Mint', 'Red', 'Green'];
     const decorationImages = [shellfish, seaweed, seaweeds, sand, rock];
     const decorationLabels = ['Shellfish', 'Seaweed', 'Seaweed x 2', 'Sand', 'Rock'];
 
+    const getDecorationCost = (index) => {
+        switch (index) {
+            case 0: // Shellfish
+            case 1: // Seaweed
+            case 3: // Sand
+                return 50;
+            case 2: // Seaweed x 2
+                return 100;
+            case 4: // Rock
+                return 20;
+            default:
+                return 0;
+        }
+    };
     return (
         <ImageBackground source={require('../../Asset/img/background_bowl.png')} style={styles.backgroundImage}>
             <View style={styles.container}>
@@ -87,6 +101,11 @@ const FishBowlStore = () => {
                                     />
                                 </View>
                                 <Text style={styles.fishLabel}>{fishColorLabels[index]} Fish</Text>
+                                {/* Cost Button */}
+                                <TouchableOpacity style={styles.costButton}>
+                                    <Image source={require('../../Asset/img/coin_white.png')} style={styles.coinImage} />
+                                    <Text style={styles.costText}>{(index + 1) * 100}</Text>
+                                </TouchableOpacity>
                             </View>
                         ))}
                     </ScrollView>
@@ -108,6 +127,11 @@ const FishBowlStore = () => {
                                     />
                                 </View>
                                 <Text style={styles.decorationLabel}>{decorationLabels[index]}</Text>
+                                {/* Cost Button */}
+                                <TouchableOpacity style={styles.costButton}>
+                                    <Image source={require('../../Asset/img/coin_white.png')} style={styles.coinImage} />
+                                    <Text style={styles.costText}>{getDecorationCost(index)}</Text>
+                                </TouchableOpacity>
                             </View>
                         ))}
                     </ScrollView>
@@ -183,10 +207,8 @@ const styles = StyleSheet.create({
         color: '#adadad',
     },
     typesOfFish: {
-        width: 108,
-        height: 24,
-        margin: 36,
-        fontSize: 17,
+        margin:20,
+        fontSize: 18,
         fontWeight: '500',
         color: '#1e1e1e',
     },
@@ -210,10 +232,8 @@ const styles = StyleSheet.create({
         color: '#404040',
     },
     decoration: {
-        width: 89,
-        height: 24,
-        margin: '0 174px 25px 20px',
-        fontSize: 17,
+        margin:20,
+        fontSize: 18,
         fontWeight: '500',
         color: '#1e1e1e',
     },
@@ -243,6 +263,26 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
         overflow: 'hidden',
+    },
+    costButton: {
+        width: 65,
+        height: 29,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 5,
+        backgroundColor:"#0057ff",
+        borderRadius:10
+    },
+    coinImage: {
+        width: 19,
+        height: 19,
+        marginRight: 5,
+        marginLeft: 5,
+    },
+    costText: {
+        fontSize: 13,
+        fontWeight: '500',
+        color: '#fff',
     },
 });
 
