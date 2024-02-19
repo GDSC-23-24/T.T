@@ -86,13 +86,21 @@ const FishBowlHome = () => {
                     <Image source={require('../../Asset/img/fishbowl0.png')} style={styles.fishbowl0} />
                     {/* Display components in the fish bowl */}
                     {components.map((component) => (
+                    // Check if the component should be in the bowl
+                    component.isInBowl && (
                         <Image
                             key={component.id}
                             source={componentImagePaths[component.componentName]}
-                            style={{ ...styles.fishbowl0, position: 'absolute', top: component.y, left: component.x }}
+                            style={{
+                                ...styles.fishbowl0,
+                                position: 'absolute',
+                                top: component.y,
+                                left: component.x,
+                            }}
                             onError={(e) => console.log(`Error loading image: ${e.nativeEvent.error}`)}
                         />
-                    ))}
+                    )
+                ))}
                 </View>
             </View>
             {/* Bottom Bar */}
