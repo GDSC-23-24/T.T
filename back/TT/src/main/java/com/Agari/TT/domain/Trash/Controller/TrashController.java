@@ -36,7 +36,11 @@ public class TrashController {
 
         String msg = trashService.save(trashImage,memberDetail.getUsername());
 
-        return new CommonResponse(msg);
+        CommonResponse response = new CommonResponse(msg);
+
+        if(msg.equals("관리자 승인 요청 대기 중")) response.setFailResponse(msg);
+
+        return response;
     }
 
 

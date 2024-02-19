@@ -51,7 +51,7 @@ public class MemberController {
     /**
      * 로그인
      */
-    @PostMapping("api/sign-in")
+    @PostMapping("/api/sign-in")
     public SingleResponse signIn(@RequestBody SignInDto signInDto) {
         String token = memberService.signIn(signInDto);
 

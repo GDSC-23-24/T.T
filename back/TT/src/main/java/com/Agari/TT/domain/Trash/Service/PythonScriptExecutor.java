@@ -45,17 +45,24 @@ public class PythonScriptExecutor {
 
 
             if (exitCode == 0) {
-                String result = output.toString();
+                String[] result = output.toString().split(",");
+
                 // "Predicted Label:" 뒤의 문자열 값을 추출합니다.
                 String labelPrefix = "Predicted Label: ";
-                int startIndex = result.indexOf(labelPrefix);
-                if (startIndex != -1) {
-                    // "Predicted Label:" 문자열이 있으면, 해당 부분 뒤의 문자열을 추출합니다.
-                    return result.substring(startIndex + labelPrefix.length()).trim();
-                } else {
-                    // "Predicted Label:" 문자열을 찾을 수 없으면, null 또는 적절한 에러 메시지를 반환합니다.
+                String labelPrefix2 = "Probability: ";
+
+                int startIndex = result[0].indexOf(labelPrefix);
+                String trashType = result[0].substring(startIndex + labelPrefix.length()).trim();
+
+                startIndex = result[1].indexOf(labelPrefix2);
+                double probability = Double.valueOf(result[1].substring(startIndex + labelPrefix2.length()).trim());
+
+                if (probability<0.99){
                     return null;
                 }
+
+                return trashType;
+
             }
             else {
                 // 스크립트 실행에 실패했을 때 로그를 처리합니다.
