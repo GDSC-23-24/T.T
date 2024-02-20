@@ -31,7 +31,7 @@ const Login = () => {
           if (response.ok) {
             const responseJson = await response.json();
             console.log('로그인 성공:', responseJson);
-            navigation.navigate('FishBowlHome');
+            navigation.navigate('Main');
           } else {
             console.log('로그인 실패:', response.status);
           }

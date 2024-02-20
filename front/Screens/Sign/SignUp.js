@@ -60,38 +60,47 @@ const SignUp = () => {
 
         try {
             const formData = new FormData();
-            formData.append('loginId', userID);
-            formData.append('password', password);
-            formData.append('nickname', nickname);
-
-            if (profileImageUri) {
-                const imageFileName = profileImageUri.split('/').pop();
-                formData.append('profileImage', {
-                    uri: profileImageUri,
-                    type: 'image/jpeg',
-                    name: 'profileImage.jpg',
-                });
-                
-            }
-            const response = await fetch('http://10.0.2.2:8080/api/sign-up', {
-                method: 'POST',
-                body: formData,
+      
+            var signUpDto = {
+              loginId: userID,
+              password: password,
+              nickname: nickname,
+            };
+      
+            formData.append('signUpDto', {
+              string: JSON.stringify(signUpDto),
+              type: 'application/json',
             });
-
+      
+            console.log(response);
+      
+            if (response) {
+              formData.append('profileImage', {
+                uri: response.assets[0].uri,
+                type: 'image/jpeg',
+                name: 'profileImage.jpg',
+              });
+            }
+      
+            const uploadResponse = await fetch('http://10.0.2.2:25565/api/sign-up', {
+              method: 'POST',
+              body: formData,
+            });
+      
             // Handle the response
-            const result = await response.json();
+            const result = await uploadResponse.json();
             console.log(result);
-
+      
             // Navigate to the next screen if signup is successful
             if (result.success) {
-                navigation.navigate('Login'); // Replace 'Login' with the actual screen name you want to navigate to
+              navigation.navigate('Login'); // Replace 'Login' with the actual screen name you want to navigate to
             } else {
-                // Handle unsuccessful signup
-                console.log('Signup failed:', result.error);
+              // Handle unsuccessful signup
+              console.log('Signup failed:', result.error);
             }
-        } catch (error) {
+          } catch (error) {
             console.error(error);
-        }
+          }
     };
 
 

@@ -1,62 +1,63 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, TouchableOpacity, Image, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const BottomBar = ({ }) => {
+const BottomBar = () => {
     const navigation = useNavigation();
-    const [selectedTab, setSelectedTab] = useState('Main');
 
     const handleTabPress = (tabName) => {
+        console.log('Navigating to:', tabName);
         navigation.navigate(tabName);
-        setSelectedTab(tabName);
     };
+
     return (
         <View style={styles.container}>
             <TouchableOpacity
-                style={[styles.tab, selectedTab === 'Main' && styles.selectedTab]}
+                style={styles.tab}
                 onPress={() => handleTabPress('Main')}
             >
-                <Image  source={require('../../Asset/img/map.png')}></Image>
-                <Text style={[styles.tabText, selectedTab === 'Main' && styles.selectedTabText]}>Map</Text>
+                <Image source={require('../../Asset/img/map_gray.png')} />
+                <Text style={styles.tabText}>Map</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-                style={[styles.tab, selectedTab === 'TrashAmount' && styles.selectedTab]}
-                onPress={() => handleTabPress('TrashAmountScreen')}
+                style={styles.tab}
+                onPress={() => handleTabPress('DroneImgScreen')}
             >
-                <Image style={styles.bottomImg} source={require('../../Asset/img/delete.png')}></Image>
-                <Text style={[styles.tabText, selectedTab === 'TrashAmount' && styles.selectedTabText]}>Trash Amount</Text>
+                <Image source={require('../../Asset/img/delete.png')} />
+                <Text style={styles.tabText}>Drone Img</Text>
             </TouchableOpacity>
+            
             <Image
                 source={require('../../Asset/img/logo.png')}
                 style={styles.ttLogo}
             />
+            
             <TouchableOpacity
-                style={[styles.tab, selectedTab === 'FishBowl' && styles.selectedTab]}
+                style={styles.tab}
                 onPress={() => handleTabPress('FishBowlHome')}
             >
-                <Image  source={require('../../Asset/img/bowl.png')}></Image>
-                <Text style={[styles.tabText, selectedTab === 'FishBowl' && styles.selectedTabText]}>Fish Bowl</Text>
+                <Image source={require('../../Asset/img/bowl.png')} />
+                <Text style={styles.tabText}>Fish Bowl</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-                style={[styles.tab, selectedTab === 'MyPage' && styles.selectedTab]}
+                style={styles.tab}
                 onPress={() => handleTabPress('MyPage')}
             >
-                <Image  source={require('../../Asset/img/mypage.png')}></Image>
-                <Text style={[styles.tabText, selectedTab === 'MyPage' && styles.selectedTabText]}>My Page</Text>
+                <Image source={require('../../Asset/img/mypage.png')} />
+                <Text style={styles.tabText}>My Page</Text>
             </TouchableOpacity>
         </View>
     );
 };
-
 
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         height: 101,
         backgroundColor: '#fff',
-        justifyContent:'space-between'
+        justifyContent: 'space-between',
     },
     tab: {
         flex: 1,
@@ -66,34 +67,14 @@ const styles = StyleSheet.create({
     ttLogo: {
         width: 70,
         height: 70,
-       marginTop:12
+        marginTop: 12,
     },
-    map: {
-        fontSize: 11,
-        fontWeight: 'bold',
-        color: '#939393',
-    },
-    trashAmount: {
+    tabText: {
         fontSize: 11,
         fontWeight: '500',
         color: '#939393',
+        marginTop: 5,
     },
-    fishBowl: {
-        fontSize: 11,
-        fontWeight: '500',
-        color: '#939393',
-    },
-    myPage: {
-        fontSize: 11,
-        fontWeight: '500',
-        color: '#939393',
-    },
-    selectedTabText: {
-        color: '#0057ff', 
-    },
-    bottomImg:{
-        marginTop:5
-    }
 });
 
 export default BottomBar;
