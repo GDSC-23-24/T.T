@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, Image } from 'react-native';
 import BottomBar from '../Common/BottomBar';
 import TopBar from '../Common/TopBar';
-
+import { useNavigation } from '@react-navigation/native';
 const FishBowlRanking = () => {
     const [rankingsData, setRankingsData] = useState([]);
-
+    const navigation = useNavigation();
+    const handleGoPress = (memberId) => {
+        navigation.navigate('FishBowlOther', { memberId });
+    };
     useEffect(() => {
         fetch('http://10.0.2.2:8080/api/fish-bowl/ranking')
             .then(response => response.json())
@@ -45,6 +48,9 @@ const FishBowlRanking = () => {
                                 <Image source={require('../../Asset/img/favorite_none.png')} style={styles.favorite_none} />
                                 <Text style={styles.likesCount}>{rankingsData.length > 1 && rankingsData[1].likesCount}</Text>
                             </View>
+                            <TouchableOpacity style={styles.goButton} onPress={() => handleGoPress(rankingsData[1].memberDto.id)}>
+                            <Text style={styles.goButtonText}>Go</Text>
+                            </TouchableOpacity>
                         </View>
                         {/* 1st place in the middle */}
                         <View style={styles.rankItem}>
@@ -62,6 +68,9 @@ const FishBowlRanking = () => {
                                 <Image source={require('../../Asset/img/favorite_none.png')} style={styles.favorite_none} />
                                 <Text style={styles.likesCount}>{rankingsData.length > 0 && rankingsData[0].likesCount}</Text>
                             </View>
+                            <TouchableOpacity style={styles.goButton} onPress={() => handleGoPress(rankingsData[0].memberDto.id)}>
+                            <Text style={styles.goButtonText}>Go</Text>
+                            </TouchableOpacity>
                         </View>
                         {/* 3rd place on the right */}
                         <View style={styles.rankItem}>
@@ -79,6 +88,9 @@ const FishBowlRanking = () => {
                                 <Image source={require('../../Asset/img/favorite_none.png')} style={styles.favorite_none} />
                                 <Text style={styles.likesCount}>{rankingsData.length > 2 && rankingsData[2].likesCount}</Text>
                             </View>
+                            <TouchableOpacity style={styles.goButton} onPress={() => handleGoPress(rankingsData[2].memberDto.id)}>
+                            <Text style={styles.goButtonText}>Go</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
 
@@ -101,7 +113,7 @@ const FishBowlRanking = () => {
                                         <Text style={styles.likesCount}>{item.likesCount}</Text>
                                     </View>
                                 </View>
-                                <TouchableOpacity style={styles.goButton}>
+                                <TouchableOpacity style={styles.goButton} onPress={() => handleGoPress(item.memberDto.id)}>
                                     <Text style={styles.goButtonText}>Go</Text>
                                 </TouchableOpacity>
                             </View>
