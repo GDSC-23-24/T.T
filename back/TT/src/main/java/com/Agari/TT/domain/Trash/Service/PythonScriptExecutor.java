@@ -1,10 +1,14 @@
 package com.Agari.TT.domain.Trash.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Slf4j
 public class PythonScriptExecutor {
 
     public String executePythonScript(String image_url) {
@@ -57,7 +61,8 @@ public class PythonScriptExecutor {
                 startIndex = result[1].indexOf(labelPrefix2);
                 double probability = Double.valueOf(result[1].substring(startIndex + labelPrefix2.length()).trim());
 
-                if (probability<0.99){
+                log.info(trashType +  "쓰레기일 확률 : "+ probability);
+                if (probability<0.9){
                     return null;
                 }
 
