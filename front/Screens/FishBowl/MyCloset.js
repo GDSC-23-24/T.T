@@ -1,10 +1,50 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, ImageBackground, TouchableOpacity,Alert  } from 'react-native';
-import { API_TOKEN } from '../../API'
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  ImageBackground,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const MyCloset = ({ route }) => {
-    const { data } = route.params;
-    const [components, setComponents] = useState([]);
-    const [isArranging, setIsArranging] = useState(false); // State to track whether arranging is in progress
+  const { data } = route.params;
+  const [components, setComponents] = useState([]);
+  const [isArranging, setIsArranging] = useState(false); // State to track whether arranging is in progress
+  const [token, setToken] = useState('');
+  
+  const arrangeComponents = () => {
+    // Extract the coordinates of components currently in the fishbowl
+    const updatedComponents = [
+      {
+        id: component.id,
+        componentName: component.componentName,
+        x: coordinates[component.componentName].x,
+        y: coordinates[component.componentName].y,
+      },
+    ];
+
+    fetch('http://10.0.2.2:8080/api/component/edit', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+      body: JSON.stringify(updatedComponents),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Component placed in the bowl:', data);
+      })
+      .catch((error) => {
+        console.error('Error placing component in the bowl:', error);
+      });
+  };
+
     const componentImagePaths = {
         'YellowFish': require('../../Asset/img/Yellowfish.png'),
         'RedFish': require('../../Asset/img/Redfish.png'),
@@ -16,6 +56,23 @@ const MyCloset = ({ route }) => {
         'Sand': require('../../Asset/img/sand.png'),
         'Rock': require('../../Asset/img/rock.png'),
     };
+
+    useEffect(() => {
+      // Fetch the token from AsyncStorage when the component mounts
+      retrieveToken();
+    }, []);
+  
+    const retrieveToken = async () => {
+      try {
+        const storedToken = await AsyncStorage.getItem('userToken');
+        if (storedToken) {
+          setToken(storedToken);
+        }
+      } catch (error) {
+        console.error('Error retrieving token:', error);
+      }
+    };
+  
     if (!data || !data.memberDto || !data.componentResponseDtoList) {
         // If data is undefined or missing expected properties, you can handle it accordingly
         return (
@@ -35,11 +92,17 @@ const MyCloset = ({ route }) => {
     GreenFish: { x: 10, y: 20, width: 90, height: 90 },
     ShellFish: { x: 5, y: 15, width: 70, height: 70 },
     SeaWeed: { x: 25, y: 45, width: 110, height: 110 },
-    'Seaweed x 2': { x: 15, y: 25, width: 130, height: 130 },
+    'Seaweed x 2': { x: 15, y: 25, width: 100, height: 130 },
     Sand: { x: 35, y: 40, width: 100, height: 100 },
     Rock: { x: 8, y: 18, width: 85, height: 85 },
           };
-        
+          const isInBowl = components.some((c) => c.id === component.id);
+          if (isInBowl) {
+            // If the component is already in the bowl, remove it
+            setComponents((prevComponents) =>
+              prevComponents.filter((c) => c.id !== component.id)
+            );}
+            else {
        // Update the coordinates in the frontend
   setComponents((prevComponents) => [
     ...prevComponents,
@@ -50,38 +113,11 @@ const MyCloset = ({ route }) => {
       y: coordinates[component.componentName].y,
       isInBowl: true,
     },
-  ]);
+    
+  ])};  
+  
+};
 
-  // Update the coordinates in the backend
-  const updatedComponents = [
-    {
-      id: component.id,
-      componentName: component.componentName,
-      x: coordinates[component.componentName].x,
-      y: coordinates[component.componentName].y,
-    },
-  ];
-
-        
-          fetch('http://10.0.2.2:8080/api/component/edit', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + API_TOKEN,
-            },
-            body: JSON.stringify(updatedComponents),
-          })
-          .then(response => response.json())
-          .then(data => {
-            // Handle the response from the backend if needed
-            console.log('Coordinates updated successfully:', data);
-          })
-          .catch(error => {
-            console.error('Error updating coordinates:', error);
-            // Handle errors if necessary
-          });
-        };
         
       const fishbowlWidth = 250; // Adjust this value based on your fishbowl image width
       const fishbowlHeight = 200; // Adjust this value based on your fishbowl image height
@@ -158,9 +194,9 @@ const MyCloset = ({ route }) => {
                 />
               ))}
             </View>
-            <TouchableOpacity style={styles.Button}>
-              <Text style={styles.ButtonText}>arrange</Text>
-            </TouchableOpacity>
+            <TouchableOpacity style={styles.Button} onPress={arrangeComponents}>
+        <Text style={styles.ButtonText}>arrange</Text>
+      </TouchableOpacity>
           </View>
         </ImageBackground>
       );

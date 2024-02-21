@@ -36,10 +36,14 @@ const FishBowlCommunity = () => {
   };
 
   useEffect(() => {
-    // Fetch data from the API when the component mounts
+    // Retrieve token when the component mounts
     retrieveToken();
-    fetchData();
   }, []);
+
+  useEffect(() => {
+    // Fetch data from the API when the component mounts
+    fetchData();
+  }, [token]);
 
   const fetchData = async () => {
     console.log(token);
