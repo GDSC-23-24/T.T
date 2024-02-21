@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FishBowlRepository extends JpaRepository<FishBowl,Long> {
@@ -36,4 +37,7 @@ public interface FishBowlRepository extends JpaRepository<FishBowl,Long> {
     @Modifying
     @Query("update FishBowl fb set fb.viewCount= fb.viewCount + 1 where fb = ?1")
     void updateViewCount(FishBowl fishBowl);
+
+    @Query("select fb from FishBowl fb join fetch fb.likesList where fb.id = ?1")
+    Optional<FishBowl> findByIdWithFetch(Long fishBowlId);
 }

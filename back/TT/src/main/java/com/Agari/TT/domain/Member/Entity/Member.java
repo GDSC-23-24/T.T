@@ -45,8 +45,8 @@ public class Member {
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
 //    private List<ImageData> imageData;
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "member")
-    private List<Likes> likes;
+//    @OneToMany(fetch = FetchType.LAZY,mappedBy = "member")
+//    private List<Likes> likes;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<Trash> trashes;

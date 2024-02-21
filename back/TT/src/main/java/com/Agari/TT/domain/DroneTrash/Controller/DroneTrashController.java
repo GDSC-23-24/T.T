@@ -8,6 +8,7 @@ import com.Agari.TT.domain.Member.Entity.MemberDetail;
 import com.Agari.TT.domain.Response.CommonResponse;
 import com.Agari.TT.domain.Response.ListResponse;
 import com.Agari.TT.domain.Response.ResponseService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@Slf4j
 public class DroneTrashController {
 
     @Autowired
@@ -42,6 +44,7 @@ public class DroneTrashController {
 
     @GetMapping("/api/map")
     public ListResponse trackerMap(){
+        log.info("맵 정보 주기");
         List<MapDto> mapDtos = droneTrashService.getTrashMap();
 
         return responseService.getListResponse(mapDtos);
