@@ -87,9 +87,9 @@ public class SecurityConfig {
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                                 authorizeHttpRequests
-                                .requestMatchers("/**").permitAll()
+//                                .requestMatchers("/**").permitAll()
                                         .requestMatchers("/v3/api-docs/**","/swagger-resources/**","/swagger-ui/**","/api-docs/**","/static/**").permitAll()
-                                        .requestMatchers("/api/sign-in", "/api/sign-up","/api/sign-in").permitAll()
+                                        .requestMatchers("/api/sign-in", "/api/sign-up","/api/sign-in","/api/fish-bowl/**").permitAll()
                                         .anyRequest().authenticated()
                 )
                 // AccessDeniedHandler :  권한을 확인하는 과정에서 통과하지 못하는 예외가 발생할 경우 예외를 전달

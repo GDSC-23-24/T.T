@@ -1,5 +1,6 @@
 package com.Agari.TT.domain.Member.Dto;
 
+import com.Agari.TT.domain.Likes.Entity.Likes;
 import com.Agari.TT.domain.Member.Entity.Member;
 import com.Agari.TT.domain.Trash.Dto.MyPageTrashDto;
 import lombok.Getter;
@@ -29,11 +30,11 @@ public class MyPageResponseDto {
 
     List<MyPageTrashDto> trashDtoList;
 
-    public MyPageResponseDto(Member member){
+    public MyPageResponseDto(Member member, List<Likes> likes){
         this.id = member.getId();
         this.profileImageUrl = member.getProfileImageUrl();
         this.nickname = member.getNickname();
-        this.likesCount = member.getLikes().size();
+        this.likesCount = likes.size();
         this.point = member.getFishBowl().getCoin();
         this.trashDtoList = member.getTrashes().stream().map(MyPageTrashDto::from).collect(Collectors.toList());
         this.waitingCount = countWaiting(trashDtoList);

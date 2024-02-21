@@ -9,7 +9,6 @@ import com.Agari.TT.domain.FishBowl.Entity.FishBowl;
 import com.Agari.TT.domain.FishBowl.Repository.FishBowlRepository;
 import com.Agari.TT.domain.Likes.Entity.Likes;
 import com.Agari.TT.domain.Likes.Repository.LikesRepository;
-import com.Agari.TT.domain.Member.Dto.MemberDto;
 import com.Agari.TT.domain.Member.Entity.Member;
 import com.Agari.TT.domain.Member.Repository.MemberRepository;
 import com.Agari.TT.domain.Trash.Dto.TrashDto;
@@ -21,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -89,7 +87,7 @@ public class FishBowlService {
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
 
-        List<Likes> likes = member.getLikes();
+        List<Likes> likes = likesRepository.findByMember(member);
 
         List<FishBowlRankResponseDto> fishBowlRankResponseDtos = fishBowlRepository.findAllByMemberLikes(likes)
                 .stream().map(FishBowlRankResponseDto::from).collect(Collectors.toList());

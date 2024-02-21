@@ -21,6 +21,4 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     Optional<Member> findByLoginIdJoin(String loginId);
 
 
-
-    List<MemberDto> findByLikes(Member member);
 }

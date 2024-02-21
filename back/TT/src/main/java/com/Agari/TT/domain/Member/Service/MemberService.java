@@ -3,6 +3,8 @@ package com.Agari.TT.domain.Member.Service;
 import com.Agari.TT.domain.FishBowl.Entity.FishBowl;
 import com.Agari.TT.domain.FishBowl.Repository.FishBowlRepository;
 import com.Agari.TT.domain.ImageData.Service.ImageService;
+import com.Agari.TT.domain.Likes.Entity.Likes;
+import com.Agari.TT.domain.Likes.Repository.LikesRepository;
 import com.Agari.TT.domain.Member.Dto.MyPageResponseDto;
 import com.Agari.TT.domain.Member.Dto.SignInDto;
 import com.Agari.TT.domain.Member.Dto.SignUpDto;
@@ -44,6 +46,8 @@ public class MemberService {
     private final FishBowlRepository fishBowlRepository;
 
     private final TrashRepository trashRepository;
+
+    private final LikesRepository likesRepository;
 
 
 
@@ -121,7 +125,9 @@ public class MemberService {
         Member member = memberRepository.findByLoginIdJoin(loginId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
 
-        MyPageResponseDto myPageResponseDto = new MyPageResponseDto(member);
+        List<Likes> likes = likesRepository.findByFishBowl(member.getFishBowl());
+
+        MyPageResponseDto myPageResponseDto = new MyPageResponseDto(member,likes);
 
 
 
