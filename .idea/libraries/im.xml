@@ -1,0 +1,35 @@
+<component name="libraryTable">
+  <library name="im">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$" />
+      <root url="file://$PROJECT_DIR$/back/TT/src/main/java" />
+      <root url="file://$PROJECT_DIR$/back/TT/src/test/java" />
+      <root url="file://$PROJECT_DIR$/front/android/.gradle/8.3/dependencies-accessors/423f0288fa7dffe069445ffa4b72952b4629a15a/sources" />
+      <root url="file://$PROJECT_DIR$/front/android/app/build/generated/rncli/src/main/java" />
+      <root url="file://$PROJECT_DIR$/front/android/app/build/generated/source/buildConfig/debug" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-fast-image/android/build/generated/ap_generated_sources/debug/out" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-fast-image/android/build/generated/source/buildConfig/debug" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-fast-image/android/src/main/java" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-image-picker/android/build/generated/source/buildConfig/debug" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-image-picker/android/src/main/java" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-image-picker/android/src/newarch/java" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-image-picker/android/src/oldarch/java" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-linear-gradient/android/build/generated/source/buildConfig/debug" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-linear-gradient/android/src/main/java" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-maps/android/build/generated/source/buildConfig/debug" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-maps/android/src/main/java" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-safe-area-context/android/build/generated/source/buildConfig/debug" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-safe-area-context/android/src/paper/java" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-screens/android/build/generated/source/buildConfig/debug" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-screens/android/src/paper/java" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-svg/android/build/generated/source/buildConfig/debug" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-svg/android/src/main/java" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native-svg/android/src/paper/java" />
+      <root url="file://$PROJECT_DIR$/front/node_modules/react-native/ReactAndroid/src/main/java" />
+    </SOURCES>
+  </library>
+</component>
