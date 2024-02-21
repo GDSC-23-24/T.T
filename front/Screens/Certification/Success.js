@@ -1,25 +1,30 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
-import SuccessGif from '../../Asset/gif/success.gif';
 import { useNavigation } from '@react-navigation/native';
-const Success = () => {
+const Success = ({ route }) => {
   console.log('Rendering Success component');
   const navigation = useNavigation();
-  const handleDoOther= async () => {
+  const { earnedPoints } = route.params; // Extract earnedPoints from route params
+
+  const handleDoOther = async () => {
     navigation.navigate('TrashCertification');
-  }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.background}>
         <View style={styles.card}>
           <Text style={styles.title}>Success!</Text>
           <Text style={styles.message}>Authentication successful! Check out the points.</Text>
-          <Image source={SuccessGif} style={styles.image} />
+          {/* <Image source={SuccessGif} style={styles.image} /> */}
 
           <Text style={styles.span}>🎉</Text>
+          <View style={styles.Vector39} />
+
+          <View style={styles.horizontalContainer}></View>
           <View style={styles.infoContainer}>
             <Text style={styles.info}>You earned</Text>
-            <Image source={require('../../Asset/img/coin.png')}></Image>
+            <Image source={require('../../Asset/img/coin.png')} style={styles.coin}></Image>
+            <Text style={styles.points}>{earnedPoints}</Text>
           </View>
           <View style={styles.frame}>
             <TouchableOpacity style={styles.otherContainer} onPress={handleDoOther}>
@@ -83,46 +88,56 @@ const styles = StyleSheet.create({
     height: 50,
   },
   span: {
-    fontSize: 80,
+    fontSize: 100,
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#1e1e1e',
+    marginTop:50
+  },
+  Vector39: {
+    width: 300,
+    height: 2,
+    marginVertical: 29,
+    backgroundColor: '#ebf2ff',
   },
   infoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent:'center',
     marginTop: 8,
+    marginBottom: 20
   },
   info: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: '500',
     textAlign: 'center',
     color: '#adadad',
   },
+  points: {
+    fontSize: 40,
+    fontWeight: '800',
+    color: '#1e1e1e',
+  },
+  coin: {
+    width: 30,
+    height:30,
+    margin: 10
+  },
   horizontalContainer: {
     flexDirection: 'row',
-    alignItems: 'center', 
+    alignItems: 'center',
   },
-  
+
   otherImg: {
     width: 30,
     height: 30,
-    marginRight: 8, 
+    marginRight: 8,
   },
-  
+
   other: {
     fontSize: 17,
     fontWeight: '500',
     color: '#fff',
-  },
-  database: {
-    width: 22.5,
-    height: 22.5,
-    backgroundColor: '#ffe500',
-  },
-  actionContainer: {
-    marginTop: 8,
   },
   frame90: {
     width: 73,
