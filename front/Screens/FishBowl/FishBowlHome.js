@@ -80,11 +80,11 @@ const FishBowlHome = () => {
     const handleClosetPress = () => {
         console.log('My Closet button pressed, userData:', userData);
         if (userData) {
-            navigation.navigate('MyCloset', { data: userData });
+          navigation.navigate('MyCloset', { data: userData, components });
         } else {
-            console.error('Error: userData is undefined');
+          console.error('Error: userData is undefined');
         }
-    };
+      };
 
     return (
         <ImageBackground source={require('../../Asset/img/background_bowl.png')} style={styles.backgroundImage}>

@@ -3,12 +3,15 @@ import { useRoute } from '@react-navigation/native';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, Image } from 'react-native';
 import BottomBar from '../Common/BottomBar';
 import TopBar from '../Common/TopBar';
-import { API_TOKEN } from '../../API';
+
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const FishBowlOther = () => {
     const [userData, setUserData] = useState(null);
     const [components, setComponents] = useState([]);
     const [showButtons, setShowButtons] = useState(false);
+    const [token, setToken] = useState(null);
     const navigation = useNavigation();
     const route = useRoute();
     const memberId = route.params?.memberId;
@@ -23,12 +26,33 @@ const FishBowlOther = () => {
         'Sand': require('../../Asset/img/sand.png'),
         'Rock': require('../../Asset/img/rock.png'),
     };
+
+
+    const retrieveToken = async () => {
+        try {
+            const storedToken = await AsyncStorage.getItem('userToken');
+            if (storedToken) {
+                // Set the token in the component state
+                setToken(storedToken);
+            }
+        } catch (error) {
+            console.error('Error retrieving token:', error);
+        }
+    };
+
     useEffect(() => {
+        // Retrieve token when the component mounts
+        retrieveToken();
+      }, []);
+
+
+      useEffect(() => {
         fetchHomeData();
         if (memberId) {
             fetchHomeData(memberId);
         }
-    },[memberId]);
+    }, [memberId, token]); // 의존성 배열을 올바르게 수정함
+    
 
     const fetchHomeData = async (memberId) => {
         try {
@@ -36,13 +60,13 @@ const FishBowlOther = () => {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    Authorization: 'Bearer ' + API_TOKEN,
+                    Authorization: 'Bearer ' + token
                 },
             });
-    
+
             const data = await response.json();
             console.log('Fetched data:', data);
-    
+
             if (data.success) {
                 setUserData(data.data);
                 setComponents(data.data.componentResponseDtoList);
@@ -214,7 +238,7 @@ const styles = StyleSheet.create({
         width: 250,
         height: 250,
         top: 270,
-        left:80
+        left: 80
     },
     fishbowl1: {
         width: 30,
