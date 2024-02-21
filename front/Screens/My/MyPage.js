@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import BottomBar from '../Common/BottomBar';
 import { useNavigation } from '@react-navigation/native';
-import { API_TOKEN } from '../../API';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import { Calendar } from 'react-native-calendars';
 
 const MyPage = () => {
-
     const navigation = useNavigation();
     const [userData, setUserData] = useState(null);
-    const [markedDates, setMarkedDates] = useState({})
+    const [markedDates, setMarkedDates] = useState({});
     const [calenderData, setCalenderData] = useState([]);
+    const [token, setToken] = useState(null);
+
     const markCurrentDate = () => {
         const currentDate = new Date();
         const formattedDate = currentDate.toISOString().split('T')[0];
@@ -18,6 +19,7 @@ const MyPage = () => {
             [formattedDate]: { selected: true, marked: true, selectedColor: '#bdd4ff' },
         });
     };
+
     const getMarkedDates = (dataList) => {
         const markedDatesObject = {};
 
@@ -37,6 +39,7 @@ const MyPage = () => {
 
         return markedDatesObject;
     };
+
     const getStatusImage = (status) => {
         switch (status) {
             case 'complete':
@@ -49,16 +52,38 @@ const MyPage = () => {
                 return null; // You can return a default image or null based on your requirement
         }
     };
+
     useEffect(() => {
-        fetchMyPage();
-        markCurrentDate();
+        // Retrieve token when the component mounts
+        retrieveToken();
     }, []);
+
+    useEffect(() => {
+        // Fetch data and mark current date when the token changes
+        if (token) {
+            fetchMyPage();
+            markCurrentDate();
+        }
+    }, [token]);
+
+    const retrieveToken = async () => {
+        try {
+            const storedToken = await AsyncStorage.getItem('userToken');
+            if (storedToken) {
+                // Set the token in the component state
+                setToken(storedToken);
+            }
+        } catch (error) {
+            console.error('Error retrieving token:', error);
+        }
+    };
+
     const fetchMyPage = async () => {
         const options = {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
-                Authorization: 'Bearer ' + API_TOKEN,
+                Authorization: `Bearer ${token}`
             },
         };
 
@@ -143,10 +168,7 @@ const MyPage = () => {
                 {/* Other Sections */}
                 <View style={styles.sectionsContainer}>
                     {renderSection('Certification Calendar', 'certificationCalendar')}
-                    {renderSection('My Info', 'myInfo')}
-                    {renderSection('Thrown Away Trash', 'thrownAwayTrash')}
-                    {renderSection('Terms and Conditions of Use', 'termsAndConditions')}
-                    {renderSection('Customer Service', 'customerService')}
+                   
                 </View>
 
                 <TouchableOpacity style={styles.LogOutContainer} onPress={handleLogOutPress}>

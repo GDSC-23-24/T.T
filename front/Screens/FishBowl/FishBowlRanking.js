@@ -1,16 +1,90 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, Image } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    ScrollView,
+    TouchableOpacity,
+    ImageBackground,
+    Image,
+} from 'react-native';
 import BottomBar from '../Common/BottomBar';
 import TopBar from '../Common/TopBar';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const FishBowlRanking = () => {
     const [rankingsData, setRankingsData] = useState([]);
+    const [token, setToken] = useState(null);
+    const [likedItems, setLikedItems] = useState([]);
+
     const navigation = useNavigation();
-    const handleGoPress = (memberId) => {
+    const handleGoPress = memberId => {
         navigation.navigate('FishBowlOther', { memberId });
     };
+
+    const toggleLikeStatus = async (memberId) => {
+        // Check if the memberId is already in likedItems
+        if (likedItems.includes(memberId)) {
+            // If yes, remove it from the likedItems
+            setLikedItems(likedItems.filter((id) => id !== memberId));
+        } else {
+            // If no, add it to the likedItems
+            setLikedItems([...likedItems, memberId]);
+        }
+    
+        // Send a POST request to update the like status on the server
+        const url = `http://10.0.2.2:8080/api/likes/${memberId}`;
+        const method = likedItems.includes(memberId) ? 'DELETE' : 'POST';
+    
+        try {
+            const response = await fetch(url, {
+                method,
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({}), // You can include a request body if needed
+            });
+    
+            const data = await response.json();
+    
+            console.log('Response data:', data); // Log the response data
+    
+            if (data.success) {
+                console.log('Like status updated successfully:', data.message);
+            } else {
+                console.error('Failed to update like status:', data.message);
+            }
+        } catch (error) {
+            console.error('Error updating like status:', error);
+        }
+    };
+    const retrieveToken = async () => {
+        try {
+            const storedToken = await AsyncStorage.getItem('userToken');
+            if (storedToken) {
+                // Set the token in the component state
+                setToken(storedToken);
+            }
+        } catch (error) {
+            console.error('Error retrieving token:', error);
+        }
+    };
+
     useEffect(() => {
-        fetch('http://10.0.2.2:8080/api/fish-bowl/ranking')
+        retrieveToken();
+
+        const options = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`, // Include the token in the request headers
+            },
+        };
+
+        fetch('http://10.0.2.2:8080/api/fish-bowl/ranking', options)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -20,9 +94,12 @@ const FishBowlRanking = () => {
                 }
             })
             .catch(error => console.error('Error fetching data:', error));
-    }, []);
+    }, [token]);
+
     return (
-        <ImageBackground source={require('../../Asset/img/background_bowl.png')} style={styles.backgroundImage}>
+        <ImageBackground
+            source={require('../../Asset/img/background_bowl.png')}
+            style={styles.backgroundImage}>
             <ScrollView>
                 <View style={styles.container}>
                     <View style={styles.header}>
@@ -32,66 +109,38 @@ const FishBowlRanking = () => {
                     <Text style={styles.RANK}>LIKE RANK 10</Text>
                     {/* Display Top 3 rankings in pyramid style */}
                     <View style={styles.pyramidContainer}>
-                        {/* 2nd place on the left */}
-                        <View style={styles.rankItem}>
-                            <Text style={styles.rankNumber}>2</Text>
-                            <Image
-                                source={
-                                    rankingsData.length > 1 && rankingsData[1].memberDto.profileImageUrl
-                                        ? { uri: rankingsData[1].memberDto.profileImageUrl }
-                                        : require('../../Asset/img/none.png') // Default image when profileImageUrl is null
-                                }
-                                style={styles.profileImage}
-                            />
-                            <Text style={styles.rankName}>{rankingsData.length > 1 && rankingsData[1].memberDto.nickname}</Text>
-                            <View style={styles.info}>
-                                <Image source={require('../../Asset/img/favorite_none.png')} style={styles.favorite_none} />
-                                <Text style={styles.likesCount}>{rankingsData.length > 1 && rankingsData[1].likesCount}</Text>
+                        {rankingsData.slice(0, 3).map((item, index) => (
+                            <View key={index} style={styles.rankItem}>
+                                <Text style={styles.rankNumber}>{index + 1}</Text>
+                                <Image
+                                    source={
+                                        item?.memberDto?.profileImageUrl
+                                            ? { uri: item.memberDto.profileImageUrl }
+                                            : require('../../Asset/img/none.png')
+                                    }
+                                    style={styles.profileImage}
+                                />
+                                <Text style={styles.rankName}>{item?.memberDto?.nickname}</Text>
+                                <View style={styles.info}>
+                                    <TouchableOpacity onPress={() => toggleLikeStatus(item?.memberDto?.id)}>
+                                        <Image
+                                            source={
+                                                likedItems.includes(item?.memberDto?.id)
+                                                    ? require('../../Asset/img/favorite.png')
+                                                    : require('../../Asset/img/favorite_none.png')
+                                            }
+                                            style={styles.favoriteIcon}
+                                        />
+                                    </TouchableOpacity>
+                                    <Text style={styles.likesCount}>{item?.likesCount}</Text>
+                                </View>
+                                <TouchableOpacity
+                                    style={styles.goButton}
+                                    onPress={() => handleGoPress(item?.memberDto?.id)}>
+                                    <Text style={styles.goButtonText}>Go</Text>
+                                </TouchableOpacity>
                             </View>
-                            <TouchableOpacity style={styles.goButton} onPress={() => handleGoPress(rankingsData[1].memberDto.id)}>
-                            <Text style={styles.goButtonText}>Go</Text>
-                            </TouchableOpacity>
-                        </View>
-                        {/* 1st place in the middle */}
-                        <View style={styles.rankItem}>
-                            <Text style={styles.rankNumber}>1</Text>
-                            <Image
-                                source={
-                                    rankingsData.length > 0 && rankingsData[0].memberDto.profileImageUrl
-                                        ? { uri: rankingsData[0].memberDto.profileImageUrl }
-                                        : require('../../Asset/img/none.png') // Default image when profileImageUrl is null
-                                }
-                                style={styles.profileImage}
-                            />
-                            <Text style={styles.rankName}>{rankingsData.length > 0 && rankingsData[0].memberDto.nickname}</Text>
-                            <View style={styles.info}>
-                                <Image source={require('../../Asset/img/favorite_none.png')} style={styles.favorite_none} />
-                                <Text style={styles.likesCount}>{rankingsData.length > 0 && rankingsData[0].likesCount}</Text>
-                            </View>
-                            <TouchableOpacity style={styles.goButton} onPress={() => handleGoPress(rankingsData[0].memberDto.id)}>
-                            <Text style={styles.goButtonText}>Go</Text>
-                            </TouchableOpacity>
-                        </View>
-                        {/* 3rd place on the right */}
-                        <View style={styles.rankItem}>
-                            <Text style={styles.rankNumber}>3</Text>
-                            <Image
-                                source={
-                                    rankingsData.length > 2 && rankingsData[2].memberDto.profileImageUrl
-                                        ? { uri: rankingsData[2].memberDto.profileImageUrl }
-                                        : require('../../Asset/img/none.png') // Default image when profileImageUrl is null
-                                }
-                                style={styles.profileImage}
-                            />
-                            <Text style={styles.rankName}>{rankingsData.length > 2 && rankingsData[2].memberDto.nickname}</Text>
-                            <View style={styles.info}>
-                                <Image source={require('../../Asset/img/favorite_none.png')} style={styles.favorite_none} />
-                                <Text style={styles.likesCount}>{rankingsData.length > 2 && rankingsData[2].likesCount}</Text>
-                            </View>
-                            <TouchableOpacity style={styles.goButton} onPress={() => handleGoPress(rankingsData[2].memberDto.id)}>
-                            <Text style={styles.goButtonText}>Go</Text>
-                            </TouchableOpacity>
-                        </View>
+                        ))}
                     </View>
 
                     {/* Display rankings 4 to 9 inside the box with "Go" button */}
@@ -101,19 +150,31 @@ const FishBowlRanking = () => {
                                 <Text style={styles.rankNumber}>{index + 4}</Text>
                                 <Image
                                     source={
-                                        item.memberDto.profileImageUrl
+                                        item?.memberDto?.profileImageUrl
                                             ? { uri: item.memberDto.profileImageUrl }
-                                            : require('../../Asset/img/none.png') // Default image when profileImageUrl is null
+                                            : require('../../Asset/img/none.png')
                                     }
                                     style={styles.profileImage}
-                                /><View>
-                                    <Text style={styles.rankName}>{item.memberDto.nickname}</Text>
+                                />
+                                <View>
+                                    <Text style={styles.rankName}>{item?.memberDto?.nickname}</Text>
                                     <View style={styles.info}>
-                                        <Image source={require('../../Asset/img/favorite_none.png')} style={styles.favorite_none}></Image>
-                                        <Text style={styles.likesCount}>{item.likesCount}</Text>
+                                        <TouchableOpacity onPress={() => toggleLikeStatus(item?.memberDto?.id)}>
+                                            <Image
+                                                source={
+                                                    likedItems.includes(item?.memberDto?.id)
+                                                        ? require('../../Asset/img/favorite.png')
+                                                        : require('../../Asset/img/favorite_none.png')
+                                                }
+                                                style={styles.favoriteIcon}
+                                            />
+                                        </TouchableOpacity>
+                                        <Text style={styles.likesCount}>{item?.likesCount}</Text>
                                     </View>
                                 </View>
-                                <TouchableOpacity style={styles.goButton} onPress={() => handleGoPress(item.memberDto.id)}>
+                                <TouchableOpacity
+                                    style={styles.goButton}
+                                    onPress={() => handleGoPress(item?.memberDto?.id)}>
                                     <Text style={styles.goButtonText}>Go</Text>
                                 </TouchableOpacity>
                             </View>
@@ -153,11 +214,11 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         color: 'black',
         marginLeft: 20,
-        marginTop: 10
+        marginTop: 10,
     },
     rankItem: {
         alignItems: 'center',
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     pyramidContainer: {
         flexDirection: 'row',
@@ -166,10 +227,10 @@ const styles = StyleSheet.create({
     },
     rankItem2: {
         alignItems: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     info: {
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     rankNumber: {
         fontSize: 17,
@@ -186,12 +247,12 @@ const styles = StyleSheet.create({
         fontSize: 11,
         color: '#1e1e1e',
     },
-    favorite_none: {
-        marginTop: 2
+    favorite: {
+        marginTop: 2,
     },
     likesCount: {
         fontSize: 13,
-        marginLeft: 5
+        marginLeft: 5,
     },
     rankingBox: {
         flexDirection: 'column',
@@ -209,7 +270,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10,
         borderWidth: 1.5,
-        borderColor: "#bdd4ff",
+        borderColor: '#bdd4ff',
         backgroundColor: '#fff',
         marginLeft: 'auto',
         marginRight: 10,

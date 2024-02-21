@@ -1,45 +1,83 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { tokens } from '../../atom';
+import { useRecoilState } from 'recoil';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = () => {
     const navigation = useNavigation();
     const [showPassword, setShowPassword] = useState(false);
     const [password, setPassword] = useState('');
     const [loginId, setloginId] = useState('');
-    
+    const [token, setToken] = useRecoilState(tokens);
+
+    useEffect(() => {
+        // Check if there's a stored token when the component mounts
+        retrieveToken();
+    }, []);
+
     const handleSignUpPress = () => {
         navigation.navigate('SignUp');
     };
-    const handleLoginPress = async () => {
-        signInDto = {
-          loginId: loginId, // 사용자 ID
-          password: password, // 사용자 비밀번호
-        };
-    
-        const options = {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(signInDto),
-        };
-    
+
+    const storeToken = async (token) => {
         try {
-          const response = await fetch('http://10.0.2.2:8080/sign-in', options);
-          if (response.ok) {
-            const responseJson = await response.json();
-            console.log('로그인 성공:', responseJson);
-            navigation.navigate('Main');
-          } else {
-            console.log('로그인 실패:', response.status);
-          }
+            await AsyncStorage.setItem('userToken', token);
         } catch (error) {
-          console.error('로그인 에러:', error);
+            console.error('Error storing token:', error);
         }
-    
-      };
+    };
+
+    const retrieveToken = async () => {
+        try {
+            const storedToken = await AsyncStorage.getItem('userToken');
+            if (storedToken) {
+                // Set the token from storage
+                setToken(storedToken);
+            }
+        } catch (error) {
+            console.error('Error retrieving token:', error);
+        }
+    };
+
+    const handleLoginPress = async () => {
+        const signInDto = {
+            loginId: loginId,
+            password: password,
+        };
+        const options = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(signInDto),
+        };
+        try {
+            const response = await fetch('http://10.0.2.2:8080/api/sign-in', options);
+
+            if (response.ok) {
+                const responseJson = await response.json();
+                console.log('로그인 성공:', responseJson);
+
+                // Assuming responseJson.data contains the token
+                const userToken = responseJson.data;
+                setToken(userToken);
+
+                // Store the token for future use
+                storeToken(userToken);
+
+                // Navigate to the main screen
+                navigation.navigate('Main');
+            } else {
+                console.log('로그인 실패:', response.status);
+            }
+        } catch (error) {
+            console.error('로그인 에러:', error);
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
