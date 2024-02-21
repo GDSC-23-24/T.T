@@ -4,6 +4,7 @@ import com.Agari.TT.domain.Member.Entity.MemberDetail;
 import com.Agari.TT.domain.Response.CommonResponse;
 import com.Agari.TT.domain.Response.ResponseService;
 import com.Agari.TT.domain.Response.SingleResponse;
+import com.Agari.TT.domain.Trash.Dto.ImageUploadResponseDto;
 import com.Agari.TT.domain.Trash.Service.TrashService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,14 +32,15 @@ public class TrashController {
      */
     @Operation(summary = "쓰레기 사진 업로드 후 코인 지급")
     @PostMapping("/api/trash")
-    public CommonResponse uploadTrash( @RequestPart MultipartFile trashImage,
+    public SingleResponse uploadTrash( @RequestPart MultipartFile trashImage,
                                       @AuthenticationPrincipal MemberDetail memberDetail) throws IOException {
 
-        String msg = trashService.save(trashImage,memberDetail.getUsername());
+        ImageUploadResponseDto imageUploadResponseDto = trashService.save(trashImage,memberDetail.getUsername());
 
-        CommonResponse response = new CommonResponse(msg);
+        SingleResponse response = responseService.getSingleResponse(imageUploadResponseDto.getCoin());
 
-        if(msg.equals("관리자 승인 요청 대기 중")) response.setFailResponse(msg);
+        if(imageUploadResponseDto.getMsg().equals("관리자 승인 요청 대기 중"))
+            response.setFailResponse(imageUploadResponseDto.getMsg());
 
         return response;
     }

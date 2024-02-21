@@ -5,6 +5,7 @@ import com.Agari.TT.domain.ImageData.Service.ImageService;
 import com.Agari.TT.domain.Member.Entity.Member;
 import com.Agari.TT.domain.Member.Repository.MemberRepository;
 import com.Agari.TT.domain.Member.Service.MemberService;
+import com.Agari.TT.domain.Trash.Dto.ImageUploadResponseDto;
 import com.Agari.TT.domain.Trash.Entity.Trash;
 import com.Agari.TT.domain.Trash.Repository.TrashRepository;
 import com.Agari.TT.global.Exception.CustomErrorCode;
@@ -34,7 +35,7 @@ public class TrashService {
 
 
 
-    public String save(MultipartFile trashImage, String loginId) throws IOException {
+    public ImageUploadResponseDto save(MultipartFile trashImage, String loginId) throws IOException {
         String url = imageService.exec(trashImage);
 
         Member member =  memberRepository.findByLoginId(loginId)
@@ -60,6 +61,8 @@ public class TrashService {
             trashRepository.save(trash);
 
             msg = "관리자 승인 요청 대기 중";
+            return new ImageUploadResponseDto(msg,null);
+
         }
         else{
 
@@ -74,12 +77,29 @@ public class TrashService {
 
             // 여기서 쓰레기 타입에 따른 코인 차등 부여
 
-            fishBowlRepository.updateMemberCoin(500,member);
+            int coin = CoinByType(trashType);
+
+            fishBowlRepository.updateMemberCoin(coin,member);
 
             msg = "500코인이 적립되었습니다.";
+            return new ImageUploadResponseDto(msg,coin);
         }
-
-        return msg;
     }
+
+    public int CoinByType(String trashType){
+        String[] class_labels = {"cardboard","glass","metal","paper","plastic","trash"};
+
+        switch (trashType){
+            case "cardboard","glass":
+                return 300;
+
+            case "metal","plastic":
+                return 200;
+            case "paper","trash":
+                return 100;
+        }
+        return 0;
+    }
+
 
 }
