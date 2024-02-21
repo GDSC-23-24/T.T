@@ -6,7 +6,6 @@ const BottomBar = () => {
     const navigation = useNavigation();
 
     const handleTabPress = (tabName) => {
-        console.log('Navigating to:', tabName);
         navigation.navigate(tabName);
     };
 
@@ -22,10 +21,10 @@ const BottomBar = () => {
 
             <TouchableOpacity
                 style={styles.tab}
-                onPress={() => handleTabPress('DroneImgScreen')}
+                onPress={() => handleTabPress('TrashCertification')}
             >
                 <Image source={require('../../Asset/img/delete.png')} />
-                <Text style={styles.tabText}>Drone Img</Text>
+                <Text style={styles.tabText}>Upload Img</Text>
             </TouchableOpacity>
             
             <Image
