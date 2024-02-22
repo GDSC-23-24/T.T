@@ -1,9 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, TextInput, TouchableOpacity, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { tokens } from '../../atom';
 import { useRecoilState } from 'recoil';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+const ModalComponent = ({ isVisible, message, onClose }) => {
+    return (
+        <Modal
+            visible={isVisible}
+            transparent
+            animationType="slide"
+            onRequestClose={() => onClose()}
+        >
+            <View style={{ flex: 1,justifyContent: 'center', alignItems: 'center' }}>
+                <View style={styles.modalContainer}>
+                    <Text style={{ fontSize: 18, marginBottom: 10, color: '#404040' }}>{message}</Text>
+                    <TouchableOpacity onPress={() => onClose()}>
+                        <Text style={{ fontSize: 17, color: '#0057ff', textAlign:"right" }}>OK</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </Modal>
+    );
+};
 
 const Login = () => {
     const navigation = useNavigation();
@@ -12,8 +31,10 @@ const Login = () => {
     const [loginId, setloginId] = useState('');
     const [token, setToken] = useRecoilState(tokens);
 
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
+
     useEffect(() => {
-        // Check if there's a stored token when the component mounts
         retrieveToken();
     }, []);
 
@@ -33,7 +54,6 @@ const Login = () => {
         try {
             const storedToken = await AsyncStorage.getItem('userToken');
             if (storedToken) {
-                // Set the token from storage
                 setToken(storedToken);
             }
         } catch (error) {
@@ -41,28 +61,31 @@ const Login = () => {
         }
     };
 
-    const handleLoginPress = async () => {
-        const signInDto = {
-            loginId: loginId,
-            password: password,
-        };
-        const options = {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(signInDto),
-        };
-        try {
-            const response = await fetch('http://10.0.2.2:8080/api/sign-in', options);
+const handleLoginPress = async () => {
+    const signInDto = {
+        loginId: loginId,
+        password: password,
+    };
+    const options = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(signInDto),
+    };
 
-            if (response.ok) {
-                const responseJson = await response.json();
-                console.log('로그인 성공:', responseJson);
+    try {
+        const response = await fetch('http://10.0.2.2:8080/api/sign-in', options);
 
-                // Assuming responseJson.data contains the token
-                const userToken = responseJson.data;
+        if (response.ok) {
+            const responseJson = await response.json();
+            console.log('login success:', responseJson);
+
+            const userToken = responseJson.data;
+            
+            // Check if userToken is defined before setting and storing
+            if (userToken) {
                 setToken(userToken);
 
                 // Store the token for future use
@@ -71,12 +94,25 @@ const Login = () => {
                 // Navigate to the main screen
                 navigation.navigate('Main');
             } else {
-                console.log('로그인 실패:', response.status);
+                console.error('login error: invalid token');
+                setModalMessage('Please use it after registering as a member.');
+                setIsModalVisible(true);
             }
-        } catch (error) {
-            console.error('로그인 에러:', error);
+        } else {
+            const responseJson = await response.json();
+
+            if (responseJson.errorName === "USER_NOT_FOUND") {
+                console.log('This user does not exist.');
+                setModalMessage('Please use it after registering as a member.');
+                setIsModalVisible(true);
+            } else {
+                console.log('login fail:', response.status);
+            }
         }
-    };
+    } catch (error) {
+        console.error('login error:', error);
+    }
+};
 
     return (
         <SafeAreaView style={styles.container}>
@@ -130,6 +166,13 @@ const Login = () => {
             <TouchableOpacity style={styles.containerWhite} onPress={handleSignUpPress}>
                 <Text style={[styles.text, styles.blueText]}>SignUp</Text>
             </TouchableOpacity>
+            <ModalComponent
+                isVisible={isModalVisible}
+                message={modalMessage}
+                onClose={() => setIsModalVisible(false)}
+            >
+            </ModalComponent>
+
         </SafeAreaView>
     );
 };
@@ -252,6 +295,17 @@ const styles = StyleSheet.create({
     },
     blueText: {
         color: '#74a3ff',
+    },
+    modalContainer: {
+        width:360,
+        height:180,
+        backgroundColor: "#fff",
+        padding: 20,
+        borderRadius: 10,
+        borderWidth:3,
+        borderColor:"rgba(0, 87, 255, 0.5)",
+        position:"absolute",
+        top:206
     },
 });
 
