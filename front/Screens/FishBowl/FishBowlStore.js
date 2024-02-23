@@ -9,6 +9,7 @@ import {
   Image,
   TextInput,
 } from 'react-native';
+import { Alert } from 'react-native';
 import BottomBar from '../Common/BottomBar';
 import TopBar from '../Common/TopBar';
 import axios from 'axios';
@@ -104,10 +105,18 @@ const FishBowlStore = () => {
       .then(response => {
         // Handle the response if needed
         console.log('API response:', response.data);
+        Alert.alert(
+          'Purchase Complete',
+          `${componentName}(${cost})Point: Purchase completed successfully!`,
+        );
       })
       .catch(error => {
         // Handle errors
         console.error('API error:', error);
+        Alert.alert(
+          'Purchase Failed',
+          'There was an error completing the purchase. Please try again.',
+        );
       });
   };
   return (
