@@ -16,34 +16,53 @@ const MyCloset = ({ route }) => {
   const [isArranging, setIsArranging] = useState(false); // State to track whether arranging is in progress
   const [token, setToken] = useState('');
   
+  const coordinates = {
+    YellowFish: { x: 30, y: 50, width: 100, height: 100 },
+RedFish: { x: 20, y: 30, width: 80, height: 80 },
+MintFish: { x: 40, y: 5, width: 120, height: 120 },
+GreenFish: { x: 10, y: 20, width: 90, height: 90 },
+ShellFish: { x: 5, y: 15, width: 70, height: 70 },
+SeaWeed: { x: 25, y: 45, width: 110, height: 110 },
+'Seaweed x 2': { x: 15, y: 25, width: 100, height: 130 },
+Sand: { x: 35, y: 40, width: 100, height: 100 },
+Rock: { x: 8, y: 18, width: 85, height: 85 },
+  };
+
   const arrangeComponents = () => {
-    // Extract the coordinates of components currently in the fishbowl
-    const updatedComponents = [
-      {
+  // Ensure coordinates is accessible here
+  const updatedComponents = components.map((component) => {
+    const coordinate = coordinates[component.componentName];
+    if (coordinate) {
+      return {
         id: component.id,
         componentName: component.componentName,
-        x: coordinates[component.componentName].x,
-        y: coordinates[component.componentName].y,
-      },
-    ];
+        x: coordinate.x,
+        y: coordinate.y,
+      };
+    } else {
+      console.error(`Coordinates not found for ${component.componentName}`);
+      return component; // or handle the missing coordinates case as needed
+    }
+  });
 
-    fetch('http://10.0.2.2:8080/api/component/edit', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
-      },
-      body: JSON.stringify(updatedComponents),
+  fetch('http://10.0.2.2:8080/api/component/edit', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    },
+    body: JSON.stringify(updatedComponents),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Components placed in the bowl:', data);
+      Alert.alert('Success', 'Components arranged and saved successfully.');
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Component placed in the bowl:', data);
-      })
-      .catch((error) => {
-        console.error('Error placing component in the bowl:', error);
-      });
-  };
+    .catch((error) => {
+      console.error('Error placing components in the bowl:', error);
+    });
+};
 
     const componentImagePaths = {
         'YellowFish': require('../../Asset/img/Yellowfish.png'),
@@ -85,17 +104,6 @@ const MyCloset = ({ route }) => {
 
     const { memberDto, componentResponseDtoList } = data;
     const placeComponentInBowl = (component) => {
-        const coordinates = {
-            YellowFish: { x: 30, y: 50, width: 100, height: 100 },
-    RedFish: { x: 20, y: 30, width: 80, height: 80 },
-    MintFish: { x: 40, y: 5, width: 120, height: 120 },
-    GreenFish: { x: 10, y: 20, width: 90, height: 90 },
-    ShellFish: { x: 5, y: 15, width: 70, height: 70 },
-    SeaWeed: { x: 25, y: 45, width: 110, height: 110 },
-    'Seaweed x 2': { x: 15, y: 25, width: 100, height: 130 },
-    Sand: { x: 35, y: 40, width: 100, height: 100 },
-    Rock: { x: 8, y: 18, width: 85, height: 85 },
-          };
           const isInBowl = components.some((c) => c.id === component.id);
           if (isInBowl) {
             // If the component is already in the bowl, remove it
@@ -104,14 +112,14 @@ const MyCloset = ({ route }) => {
             );}
             else {
        // Update the coordinates in the frontend
-  setComponents((prevComponents) => [
-    ...prevComponents,
-    {
-      id: component.id,
-      componentName: component.componentName,
-      x: coordinates[component.componentName].x,
-      y: coordinates[component.componentName].y,
-      isInBowl: true,
+       setComponents((prevComponents) => [
+        ...prevComponents,
+        {
+          id: component.id,
+          componentName: component.componentName,
+          x: coordinates[component.componentName].x,
+          y: coordinates[component.componentName].y,
+          isInBowl: true,
     },
     
   ])};  
@@ -254,13 +262,15 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     Button: {
-        marginLeft: 280,
-        marginBottom: 10,
-        borderRadius: 100,
-        backgroundColor: '#0057ff',
-        width: 70,
-        height: 70,
-    },
+      marginLeft: 280,
+      marginBottom: 10,
+      borderRadius: 10,
+      backgroundColor: '#0057ff',
+      width: 70,
+      height: 40,
+      padding:10
+  },
+
     ButtonText: {
         fontSize: 13,
         fontWeight: '500',
@@ -281,7 +291,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         width: 250,
         height: 250,
-        top: 440,
+        top: 470,
         left: 80
     },
 });
