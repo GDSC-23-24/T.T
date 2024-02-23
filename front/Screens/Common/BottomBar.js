@@ -7,7 +7,15 @@ const BottomBar = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [knowledgeData, setKnowledgeData] = useState(null);
     const [userToken, setUserToken] = useState(null);
+    const modalImages = [
+        require('../../Asset/img/dorpin.png'),
+        require('../../Asset/img/turttle.png'),
+    ];
 
+    const getRandomImage = () => {
+        const randomIndex = Math.floor(Math.random() * modalImages.length);
+        return modalImages[randomIndex];
+    };
     const retrieveUserToken = async () => {
         try {
             const token = await AsyncStorage.getItem('userToken');
@@ -19,7 +27,7 @@ const BottomBar = () => {
 
     useEffect(() => {
         retrieveUserToken();
-    }, []); 
+    }, []);
 
     const handleTabPress = (tabName) => {
         navigation.navigate(tabName);
@@ -66,9 +74,9 @@ const BottomBar = () => {
                 <Image source={require('../../Asset/img/delete.png')} />
                 <Text style={styles.tabText}>Upload Img</Text>
             </TouchableOpacity>
-            
+
             <TouchableOpacity
-                onPress={handleLogoPress} 
+                onPress={handleLogoPress}
             >
                 <Image
                     source={require('../../Asset/img/logo.png')}
@@ -102,15 +110,14 @@ const BottomBar = () => {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
                         <View style={styles.HeadContent}>
-                            <Text style={styles.HeadText}>Today's Knowledge!</Text>
+                            <Text style={styles.HeadText}> Marine News </Text>
                         </View>
-                        <Text style={styles.dot}>----------------------------------------------------------------------------</Text>
                         {knowledgeData && (
                             <>
-                                <Image source={require('../../Asset/img/modal.png')} style={styles.modalImage}/>
-                                <Text>{knowledgeData}</Text>
+                                <Text style={styles.knowledgeData}>{knowledgeData}</Text>
+                                <Image source={getRandomImage()} style={styles.modalImage} />
                                 <TouchableOpacity onPress={closeModal} style={styles.modalButton}>
-                                    <Text style={styles.modalText}>Yes, I confirmed it.</Text>
+                                    <Text style={styles.modalButtonText}>Okay, I got it</Text>
                                 </TouchableOpacity>
                             </>
                         )}
@@ -157,39 +164,44 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 10,
         alignItems: 'center',
-        marginTop:242,
-        width:350,
-        height:290,
-        borderWidth:3,
-        borderColor:"#rgba(0, 87, 255, 0.5)"
+        marginTop: 50,
+        width: 350,
+        height: 380,
     },
-    HeadContent:{
-        flexDirection:"row"
+    HeadContent: {
+        flexDirection: "row"
     },
-    HeadText:{
-    fontSize:30,
-    color:"#404040"
+    HeadText: {
+        fontSize: 30,
+        color: "#000",
+        fontWeight: "600"
     },
-    modalButton:{
-        width:145,
-        height:43,
+    knowledgeData: {
+        fontSize: 17,
+        color: '#939393',
+        fontWeight: "500",
+        textAlign:"center"
+    },
+    modalButton: {
+        width: 296,
+        height: 50,
         borderRadius: 10,
-        backgroundColor:"rgba(0, 87, 255, 0.5)",
-        padding:10,
-        margin:10
+        backgroundColor: "#0057ff",
+        padding: 10,
+        marginTop: 30
     },
-    modalText:{
+    modalButtonText: {
         color: "#fff",
-        fontSize:17
+        fontSize: 19,
+        fontWeight: "400",
+        textAlign: "center",
     },
-    modalImage:{
-        margin:7,
-        width:70,
-        height:70,  
+    modalImage: {
+        margin: 7,
+        width: 151,
+        height: 153,
     },
-    dot:{
-        color:"rgba(0, 87, 255, 0.5)",
-    }
+
 });
 
 export default BottomBar;
