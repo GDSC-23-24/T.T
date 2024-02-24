@@ -50,7 +50,7 @@ It is an app using a garbage tracking drone that aims to contribute to water qua
 |            | 백엔드                  | 프론트엔드                | AI                    | 디자인                  |
 |------------|-----------------------|-------------------------|----------------------|------------------------|
 | **이름**   | 채승지     | 하윤지   | 이유빈       | 주연우     |
-| **GitHub** | [백엔드GitHub](https://github.com/백엔드기여자) | [프론트GitHub](https://github.com/프론트기여자) | [AIGitHub](https://github.com/AI기여자) | [디자인GitHub](https://github.com/디자인기여자) |
+
 
 
 
