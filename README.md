@@ -40,7 +40,8 @@ It is an app using a garbage tracking drone that aims to contribute to water qua
 
 
 # 🎥. Demo Video
-링크
+
+[Demo Video](https://www.youtube.com/watch?v=klZVy4JgNh0)
 
 
 
@@ -56,13 +57,4 @@ It is an app using a garbage tracking drone that aims to contribute to water qua
 
 # How to build Project
 
-backend : spring 
-
-개인정보 보호를 위해 환경변수를 이용해 프로젝트를 구성하였습니다.
-"application.yml"파일에 값들을 넣기 위해
-
-"~"를 복사 붙여넣기 하시면 됩니다.
-
-front : React Native 
-
-구글 맵 api키를 api.js에 넣으면 됩니다.
+You can build it by referring to the setting.zip file in the setting folder of our repository.
