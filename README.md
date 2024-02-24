@@ -49,7 +49,7 @@ It is an app using a garbage tracking drone that aims to contribute to water qua
 
 |            | Backend                  | Frontend                | AI                    | Design                  |
 |------------|-----------------------|-------------------------|----------------------|------------------------|
-| **이름**   | 채승지     | 하윤지   | 이유빈       | 주연우     |
+| **Name**   | 채승지     | 하윤지   | 이유빈       | 주연우     |
 
 
 
