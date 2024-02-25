@@ -50,6 +50,7 @@ It is an app using a garbage tracking drone that aims to contribute to water qua
 |            | Backend                  | Frontend                | AI                    | Design                  |
 |------------|-----------------------|-------------------------|----------------------|------------------------|
 | **Name**   | 채승지     | 하윤지   | 이유빈       | 주연우     |
+|    | Seungji Chae     | Yunji Ha   | Yubin Lee       | Yeonwoo Ju     |
 
 
 
@@ -58,3 +59,7 @@ It is an app using a garbage tracking drone that aims to contribute to water qua
 # How to build Project
 
 You can build it by referring to the setting.zip file in the setting folder of our repository.
+
+jdk version : 17 <br>
+sdk(api level) : 30 <br>
+node -v : 18.18.2 <br>
